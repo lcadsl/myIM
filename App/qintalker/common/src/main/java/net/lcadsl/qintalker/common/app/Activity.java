@@ -14,20 +14,23 @@ import butterknife.ButterKnife;
 
 public abstract class Activity extends AppCompatActivity {
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         //在界面未初始化之前调用的初始化窗口
         initWidows();
 
-        if(initArgs(getIntent().getExtras())) {
-            getContentLayoutId();
+        if (initArgs(getIntent().getExtras())) {
+            //得到界面id并设置到activity界面中
+            int layId = getContentLayoutId();
+            setContentView(layId);
+
             initWidge();
             initData();
-        }else {
+        } else {
             finish();
         }
-
     }
+
 
     //初始化窗口
     protected void initWidows(){
