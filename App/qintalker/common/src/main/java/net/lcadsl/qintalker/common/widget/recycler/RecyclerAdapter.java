@@ -199,7 +199,7 @@ implements View.OnClickListener, View.OnLongClickListener,AdapterCallback<Data> 
 
 
 
-        
+
         //用于绑定数据的触发，data为绑定的数据
         void bind(Data data){
             this.mData = data;
