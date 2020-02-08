@@ -24,7 +24,7 @@ public abstract class Activity extends AppCompatActivity {
             int layId = getContentLayoutId();
             setContentView(layId);
 
-            initWidge();
+            initWidget();
             initData();
         } else {
             finish();
@@ -48,7 +48,7 @@ public abstract class Activity extends AppCompatActivity {
     protected abstract int getContentLayoutId();
 
     //初始化控件
-    protected void initWidge(){
+    protected void initWidget(){
         ButterKnife.bind(this);
 
     }
