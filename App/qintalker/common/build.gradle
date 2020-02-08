@@ -27,10 +27,20 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
 
     implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportVersion"
     annotationProcessor"com.android.support:recyclerview-v7:$rootProject.ext.supportVersion"
+
+
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+
+    implementation "com.android.support:design:$rootProject.ext.supportVersion"
+
+    implementation "net.qiujuer.genius:ui:$rootProject.ext.geniusVersion"
+    implementation "net.qiujuer.genius:res:$rootProject.ext.geniusVersion"
+
+    implementation "de.hdodenhof:circleimageview:$rootProject.ext.circleimageviewVersion"
+    implementation "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
 
 
     testImplementation 'junit:junit:4.12'
