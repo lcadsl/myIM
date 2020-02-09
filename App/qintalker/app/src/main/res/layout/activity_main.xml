@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,27 +7,77 @@
     android:orientation="vertical"
     tools:context="net.lcadsl.qintalker.push.MainActivity">
 
-    <EditText
-        android:id="@+id/edit_query"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="@dimen/actionBarWithStatusBarSize">
+        <FrameLayout
+            android:layout_marginTop="@dimen/statusBarSize"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/len_4"
+            android:paddingRight="@dimen/len_4">
 
-    <Button
-        android:id="@+id/btn_Submit"
-        android:text="Submit"
+
+            <net.lcadsl.qintalker.common.widget.PortraitView
+                android:layout_width="@dimen/len_40"
+                android:layout_height="@dimen/len_40"
+                android:layout_margin="@dimen/len_4"
+                android:foreground="@drawable/ic_touch_menu"
+                android:clickable="true"
+                android:src="@drawable/default_portrait"
+                android:focusable="true" />
+
+            <TextView
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/app_name"/>
+
+            <ImageView
+                android:tint="@color/white"
+                android:padding="@dimen/len_10"
+                android:layout_width="@dimen/len_40"
+                android:layout_height="@dimen/len_40"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_search"
+                android:layout_margin="@dimen/len_4"
+                android:foreground="@drawable/ic_touch_menu"
+                android:clickable="true"
+                android:layout_gravity="end|center_vertical"
+                android:focusable="true" />
+        </FrameLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/lay_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/len_52"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <TextView
-        android:gravity="center"
-        android:id="@+id/txt_result"
+
+    <net.qiujuer.genius.ui.widget.FloatActionButton
+        android:tint="@color/white"
+        android:padding="@dimen/len_20"
+        android:src="@drawable/ic_group_add"
+        app:gBackgroundColor="@color/colorAccent"
+        android:layout_width="@dimen/len_52"
+        android:layout_height="@dimen/len_52"
+        android:layout_marginBottom="@dimen/len_68"
+        android:layout_marginEnd="@dimen/len_16"
+        app:layout_anchor="@id/lay_content"
+        app:layout_anchorGravity="bottom|end"
+        />
+
+    <android.support.design.widget.BottomNavigationView
+        android:background="@color/grey_200"
+        android:id="@+id/navigation"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="@dimen/len_52"
+        android:layout_gravity="bottom"/>
 
-</LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
