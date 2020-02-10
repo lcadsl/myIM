@@ -6,11 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="net.lcadsl.qintalker.push.MainActivity">
-
+<!--    导航栏-->
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
+        android:elevation="@dimen/len_2"
+        android:outlineProvider="bounds"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/actionBarWithStatusBarSize">
+        android:layout_height="@dimen/actionBarWithStatusBarSize"
+        tools:targetApi="lollipop">
+
+<!--     帧布局-->
         <FrameLayout
             android:layout_marginTop="@dimen/statusBarSize"
             android:layout_width="match_parent"
@@ -18,29 +23,33 @@
             android:paddingLeft="@dimen/len_4"
             android:paddingRight="@dimen/len_4">
 
-
+<!--            头像-->
             <net.lcadsl.qintalker.common.widget.PortraitView
+                android:id="@+id/im_portrait"
                 android:layout_width="@dimen/len_40"
                 android:layout_height="@dimen/len_40"
                 android:layout_margin="@dimen/len_4"
                 android:foreground="@drawable/ic_touch_menu"
-                android:clickable="true"
-                android:src="@drawable/default_portrait"
-                android:focusable="true" />
-
+                android:padding="@dimen/len_4"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_portrait"/>
+<!--            导航栏标题-->
             <TextView
-                android:textColor="@color/white"
+                android:id="@+id/txt_title"
+                android:textAppearance="@style/TextAppearance.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/app_name"/>
-
+<!--            搜索按钮-->
             <ImageView
-                android:tint="@color/white"
+                android:id="@+id/im_search"
+                android:tint="?attr/toolbarMenuIconColor"
                 android:padding="@dimen/len_10"
                 android:layout_width="@dimen/len_40"
                 android:layout_height="@dimen/len_40"
+                android:scaleType="centerInside"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/ic_search"
                 android:layout_margin="@dimen/len_4"
@@ -52,14 +61,15 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/lay_content"
+        android:id="@+id/lay_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/len_52"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-
+<!--    浮动部分-->
     <net.qiujuer.genius.ui.widget.FloatActionButton
+        android:id="@+id/btn_action"
         android:tint="@color/white"
         android:padding="@dimen/len_20"
         android:src="@drawable/ic_group_add"
@@ -68,13 +78,13 @@
         android:layout_height="@dimen/len_52"
         android:layout_marginBottom="@dimen/len_68"
         android:layout_marginEnd="@dimen/len_16"
-        app:layout_anchor="@id/lay_content"
+        app:layout_anchor="@id/lay_container"
         app:layout_anchorGravity="bottom|end"
         />
-
+<!--    底部导航栏-->
     <android.support.design.widget.BottomNavigationView
-        android:background="@color/grey_200"
         android:id="@+id/navigation"
+        android:background="@color/grey_200"
         android:layout_width="match_parent"
         android:layout_height="@dimen/len_52"
         android:layout_gravity="bottom"/>
