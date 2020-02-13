@@ -33,6 +33,7 @@
         android:enabled="false"
         android:padding="0dp"
         android:visibility="gone"
-        tools:visibility="visible" />
+        tools:visibility="visible"
+        android:buttonTint="@color/cb_gallery"/>
 
 </net.lcadsl.qintalker.common.widget.SquareLayout>

@@ -17,6 +17,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -98,6 +99,11 @@ public class GalleyView extends RecyclerView {
             notifyRefresh = true;
         } else {
             if (mSelectedImages.size() >= MAX_IMAGE_COUNT) {
+                //得到提示文字
+                String str = getResources().getString(R.string.label_gallery_select_max_size);
+                //格式化填充
+                str = String.format(str, MAX_IMAGE_COUNT);
+                Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
                 notifyRefresh = false;
             } else {
                 mSelectedImages.add(image);
@@ -179,7 +185,7 @@ public class GalleyView extends RecyclerView {
                         IMAGE_PROJECTION,
                         null,
                         null,
-                        IMAGE_PROJECTION[2] + "DESC");//倒序查询
+                        IMAGE_PROJECTION[2] + " DESC");//倒序查询
             }
             return null;
         }
@@ -305,6 +311,7 @@ public class GalleyView extends RecyclerView {
 
             mShade.setVisibility(image.isSelect ? VISIBLE : INVISIBLE);
             mSelected.setChecked(image.isSelect);
+            mSelected.setVisibility(VISIBLE);
         }
     }
 
