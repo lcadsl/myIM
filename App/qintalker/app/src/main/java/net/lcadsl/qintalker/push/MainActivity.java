@@ -20,6 +20,7 @@ import com.bumptech.glide.request.target.ViewTarget;
 
 import net.lcadsl.qintalker.common.app.Activity;
 import net.lcadsl.qintalker.common.widget.PortraitView;
+import net.lcadsl.qintalker.push.activities.AccountActivity;
 import net.lcadsl.qintalker.push.frags.main.ActiveFragment;
 import net.lcadsl.qintalker.push.frags.main.ContactFragment;
 import net.lcadsl.qintalker.push.frags.main.GroupFragment;
@@ -106,8 +107,11 @@ public class MainActivity extends Activity
 
     @OnClick(R.id.btn_action)
     void onActionClick() {
-
+        AccountActivity.show(this);
     }
+
+
+
 
 
     /**

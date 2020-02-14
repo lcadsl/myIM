@@ -1,18 +1,16 @@
 package net.lcadsl.qintalker.push.frags.main;
 
 
-import android.support.v4.app.LoaderManager;
-
 import net.lcadsl.qintalker.common.app.Fragment;
-import net.lcadsl.qintalker.common.widget.GalleyView;
+import net.lcadsl.qintalker.common.widget.GalleryView;
 import net.lcadsl.qintalker.push.R;
 
 import butterknife.BindView;
 
 
 public class ActiveFragment extends Fragment {
-    @BindView(R.id.galleyView)
-    GalleyView mGalley;
+    @BindView(R.id.galleryView)
+    GalleryView mGalley;
 
 
     public ActiveFragment() {
@@ -29,7 +27,7 @@ public class ActiveFragment extends Fragment {
     protected void initData() {
         super.initData();
 
-        mGalley.setup(getLoaderManager(), new GalleyView.SelectedChangeListener() {
+        mGalley.setup(getLoaderManager(), new GalleryView.SelectedChangeListener() {
             @Override
             public void onSelectedCountChanged(int count) {
 
