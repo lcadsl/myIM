@@ -54,4 +54,5 @@ dependencies {
     implementation "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
     implementation "pub.devrel:easypermissions:$rootProject.ext.easyPMVersion"
+    implementation group:'commons-codec',name:'commons-codec',version:'1.12'
 }
