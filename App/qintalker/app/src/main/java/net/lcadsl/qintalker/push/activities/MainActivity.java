@@ -1,7 +1,8 @@
-package net.lcadsl.qintalker.push;
+package net.lcadsl.qintalker.push.activities;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
@@ -20,7 +21,9 @@ import com.bumptech.glide.request.target.ViewTarget;
 
 import net.lcadsl.qintalker.common.app.Activity;
 import net.lcadsl.qintalker.common.widget.PortraitView;
+import net.lcadsl.qintalker.push.R;
 import net.lcadsl.qintalker.push.activities.AccountActivity;
+import net.lcadsl.qintalker.push.frags.assist.PermissionsFragment;
 import net.lcadsl.qintalker.push.frags.main.ActiveFragment;
 import net.lcadsl.qintalker.push.frags.main.ContactFragment;
 import net.lcadsl.qintalker.push.frags.main.GroupFragment;
@@ -58,6 +61,14 @@ public class MainActivity extends Activity
 
     private NavHelper<Integer> mNavHelper;
 
+    /**
+     * MainActivity显示的入口
+     * @param context 上下文
+     */
+    public static void show(Context context){
+        context.startActivity(new Intent(context,MainActivity.class));
+    }
+
 
     @Override
     protected int getContentLayoutId() {
@@ -89,6 +100,8 @@ public class MainActivity extends Activity
                 this.view.setBackground(resource.getCurrent());
             }
         });
+
+
     }
 
     @Override
@@ -97,7 +110,7 @@ public class MainActivity extends Activity
 //从底部导航中接管menu，然后手动触发第一次点击
         Menu menu = mNavigation.getMenu();
 //触发首次点击home
-        menu.performIdentifierAction(R.id.action_home,0);
+        menu.performIdentifierAction(R.id.action_home, 0);
     }
 
     @OnClick(R.id.im_search)
@@ -109,9 +122,6 @@ public class MainActivity extends Activity
     void onActionClick() {
         AccountActivity.show(this);
     }
-
-
-
 
 
     /**
@@ -140,15 +150,15 @@ public class MainActivity extends Activity
 //        对浮动按钮进行隐藏与显示的动画，定义y轴移动值及旋转值
         float transY = 0;
         float rotation = 0;
-        if (Objects.equals(newTab.extra,R.string.title_home)){
+        if (Objects.equals(newTab.extra, R.string.title_home)) {
             //主界面时隐藏
-            transY = Ui.dipToPx(getResources(),80);
-        }else {
-            if (Objects.equals(newTab.extra,R.string.title_group)){
+            transY = Ui.dipToPx(getResources(), 80);
+        } else {
+            if (Objects.equals(newTab.extra, R.string.title_group)) {
                 //群组
                 mAction.setImageResource(R.drawable.ic_group_add);
                 rotation = -360;
-            }else {
+            } else {
                 //联系人
                 mAction.setImageResource(R.drawable.ic_contact_add);
                 rotation = 360;

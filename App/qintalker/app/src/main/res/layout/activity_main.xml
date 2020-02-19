@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="net.lcadsl.qintalker.push.MainActivity">
+    tools:context="net.lcadsl.qintalker.push.activities.MainActivity">
     <!--    导航栏-->
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

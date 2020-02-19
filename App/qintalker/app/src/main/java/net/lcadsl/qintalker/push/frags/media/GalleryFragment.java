@@ -27,10 +27,10 @@ public class GalleryFragment extends BottomSheetDialogFragment implements Galler
     public GalleryFragment() {
 
     }
-
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new TransStatusButtomSheetDialog(getContext());
+        return new TransStatusBottomSheetDialog(getContext());
     }
 
     @Override
@@ -83,17 +83,17 @@ public class GalleryFragment extends BottomSheetDialogFragment implements Galler
     }
 
 
-    private static class TransStatusButtomSheetDialog extends BottomSheetDialog {
+    public static class TransStatusBottomSheetDialog extends BottomSheetDialog {
 
-        public TransStatusButtomSheetDialog(@NonNull Context context) {
+        public TransStatusBottomSheetDialog(@NonNull Context context) {
             super(context);
         }
 
-        public TransStatusButtomSheetDialog(@NonNull Context context, int theme) {
+        public TransStatusBottomSheetDialog(@NonNull Context context, int theme) {
             super(context, theme);
         }
 
-        protected TransStatusButtomSheetDialog(@NonNull Context context, boolean cancelable, OnCancelListener cancelListener) {
+        protected TransStatusBottomSheetDialog(@NonNull Context context, boolean cancelable, OnCancelListener cancelListener) {
             super(context, cancelable, cancelListener);
         }
 

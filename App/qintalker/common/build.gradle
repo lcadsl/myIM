@@ -49,4 +49,5 @@ dependencies {
     implementation "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
     annotationProcessor"com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
     implementation project(path: ':lang')
+    implementation "net.qiujuer.genius:kit-handler:$rootProject.ext.geniusVersion"
 }

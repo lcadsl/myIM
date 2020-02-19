@@ -2,19 +2,17 @@
 
 
     <style name="AppTheme" parent="AppTheme.Base">
-<!--        <item name="toolbarStyle">@style/Widget.Toolbar</item>-->
-<!--        <item name="toolbarNavigationButtonStyle">@style/Widget.ToolbarNavigationButtonStyle</item>-->
-<!--        <item name="actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>-->
-<!--        <item name="actionOverflowMenuStyle">@style/Widget.PopupMenu.Overflow</item>-->
+        <!--        <item name="toolbarStyle">@style/Widget.Toolbar</item>-->
+        <!--        <item name="toolbarNavigationButtonStyle">@style/Widget.ToolbarNavigationButtonStyle</item>-->
+        <!--        <item name="actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>-->
+        <!--        <item name="actionOverflowMenuStyle">@style/Widget.PopupMenu.Overflow</item>-->
 
 
-
-
-<!--        顶部导航条中Icon和字体颜色-->
+        <!--        顶部导航条中Icon和字体颜色-->
         <item name="colorControlNormal">@color/white_alpha_240</item>
         <item name="colorControlActivated">@color/textPrimary</item>
     </style>
-<!--        状态栏透明-->
+    <!--        状态栏透明-->
     <style name="AppTheme.TransStatusBar.Base" parent="AppTheme">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -39,4 +37,13 @@
         <item name="android:textSize">?attr/toolbarTitleSize</item>
         <item name="android:textColor">?attr/toolbarTitleColor</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

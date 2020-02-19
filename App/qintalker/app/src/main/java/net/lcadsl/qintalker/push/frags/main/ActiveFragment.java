@@ -9,8 +9,6 @@ import butterknife.BindView;
 
 
 public class ActiveFragment extends Fragment {
-    @BindView(R.id.galleryView)
-    GalleryView mGalley;
 
 
     public ActiveFragment() {
@@ -27,12 +25,7 @@ public class ActiveFragment extends Fragment {
     protected void initData() {
         super.initData();
 
-        mGalley.setup(getLoaderManager(), new GalleryView.SelectedChangeListener() {
-            @Override
-            public void onSelectedCountChanged(int count) {
 
-            }
-        });
 
     }
 }
