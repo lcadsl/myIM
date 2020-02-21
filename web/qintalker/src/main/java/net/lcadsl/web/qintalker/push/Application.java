@@ -1,7 +1,7 @@
 package net.lcadsl.web.qintalker.push;
 
+import net.lcadsl.web.qintalker.push.provider.GsonProvider;
 import net.lcadsl.web.qintalker.push.service.AccountService;
-import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import java.util.logging.Logger;
@@ -12,7 +12,9 @@ public class Application extends ResourceConfig {
         //packages("net.lcadsl.web.qintalker.push.service");
         packages(AccountService.class.getPackage().getName());
         //Json解析器
-        register(JacksonJsonProvider.class);
+        //register(JacksonJsonProvider.class);
+        //替换解析器为Gson
+        register(GsonProvider.class);
         //日志打印输出
         register(Logger.class);
     }
