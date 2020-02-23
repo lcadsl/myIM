@@ -1,6 +1,7 @@
 package net.lcadsl.web.qintalker.push.service;
 
 import net.lcadsl.web.qintalker.push.bean.api.account.AccountRspModel;
+import net.lcadsl.web.qintalker.push.bean.api.account.LoginModel;
 import net.lcadsl.web.qintalker.push.bean.api.account.RegisterModel;
 import net.lcadsl.web.qintalker.push.bean.api.base.ResponseModel;
 import net.lcadsl.web.qintalker.push.bean.db.User;
@@ -15,6 +16,28 @@ import javax.ws.rs.core.MediaType;
 //实际访问路径为127.0.0.1/api/account/...
 @Path("/account")
 public class AccountService {
+    //登录
+    @POST
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseModel<AccountRspModel> login(LoginModel model) {
+        User user = UserFactory.findByPhone(model.getAccount().trim());
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+    //注册
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
