@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 //实际访问路径127.0.0.1/api/account/...
 @Path("/account")
-public class AccountService {
+public class AccountService extends BaseService {
     //登录
     @POST
     @Path("/login")
@@ -30,7 +30,7 @@ public class AccountService {
         if (user != null) {
             //如果有携带PushId
             if (!Strings.isNullOrEmpty(model.getPushId())) {
-                return bind(user,model.getPushId());
+                return bind(user, model.getPushId());
             }
 
             //返回当前账户
@@ -80,8 +80,8 @@ public class AccountService {
 
         if (user != null) {
             //如果有携带PushId
-            if (!Strings.isNullOrEmpty(model.getPushId())){
-                return bind(user,model.getPushId());
+            if (!Strings.isNullOrEmpty(model.getPushId())) {
+                return bind(user, model.getPushId());
             }
 
             //返回当前账户
@@ -111,22 +111,21 @@ public class AccountService {
             return ResponseModel.buildParameterError();
         }
         //拿到自己的个人信息
-        User user = UserFactory.findByToken(token);
-        if (user != null) {
-            return bind(user,pushId);
-        } else {
-            //Token失效，所以无法绑定
-            return ResponseModel.buildAccountError();
-        }
+        //User user = UserFactory.findByToken(token);
 
+        User self = getSelf();
+
+        return bind(self, pushId);
 
     }
 
+
     /**
      * 绑定的操作
-     * @param self  自己
-     * @param pushId    pushId
-     * @return  user
+     *
+     * @param self   自己
+     * @param pushId pushId
+     * @return user
      */
     private ResponseModel<AccountRspModel> bind(User self, String pushId) {
         //进行设备Id绑定的操作
@@ -137,7 +136,7 @@ public class AccountService {
 
         }
         //返回当前账户,并且已经绑定了
-        AccountRspModel rspModel = new AccountRspModel(user,true);
+        AccountRspModel rspModel = new AccountRspModel(user, true);
         return ResponseModel.buildOk(rspModel);
     }
 }
