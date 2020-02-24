@@ -93,7 +93,7 @@ public class MainActivity extends Activity
 
 //顶部导航栏图片裁剪
         Glide.with(this)
-                .load(R.drawable.bg_src_blue)
+                .load(R.drawable.bg_src_colors)
                 .centerCrop().into(new ViewTarget<View, GlideDrawable>(mLayAppbar) {
             @Override
             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
