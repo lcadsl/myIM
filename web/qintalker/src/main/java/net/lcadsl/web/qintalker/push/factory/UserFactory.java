@@ -1,16 +1,24 @@
 package net.lcadsl.web.qintalker.push.factory;
 
+import com.google.common.base.Strings;
 import net.lcadsl.web.qintalker.push.bean.db.User;
 import net.lcadsl.web.qintalker.push.utils.Hib;
 import net.lcadsl.web.qintalker.push.utils.TextUtil;
-import org.hibernate.Session;
 
+import java.util.List;
 import java.util.UUID;
 
-/**
- *
- */
+
 public class UserFactory {
+    //通过Token找到User
+    public static User findByToken(String token) {
+        return Hib.query(session -> (User) session
+                .createQuery("from User where token=:token")
+                .setParameter("token", token)
+                .uniqueResult());
+    }
+
+
     //通过Phone找到User
     public static User findByPhone(String phone) {
         return Hib.query(session -> (User) session
@@ -28,6 +36,57 @@ public class UserFactory {
     }
 
     /**
+     * 给当前账户绑定PushId
+     *
+     * @param user   自己的user
+     * @param pushId 自己设备的PushId
+     * @return 自己的user
+     */
+    public static User bindPushId(User user, String pushId) {
+        if (Strings.isNullOrEmpty(pushId))
+            return null;
+
+        //查询是否有其他账户绑定这个设备
+        //取消绑定，避免推送混乱
+        //查询的列表不能包括我自己
+        Hib.queryOnly(session -> {
+            @SuppressWarnings("unchecked")
+            List<User> userList = (List<User>) session
+                    .createQuery("from User where lower(pushId)=:pushId and id!=:userId")
+                    .setParameter("pushId", pushId.toLowerCase())
+                    .setParameter("userId", user.getId())
+                    .list();
+
+
+            for (User u : userList) {
+                //更新为null
+                u.setPushId(null);
+                session.saveOrUpdate(u);
+
+            }
+            return null;
+        });
+
+        if (pushId.equalsIgnoreCase(user.getPushId())) {
+            //如果绑定的就是当前已经绑定的，那么不需要
+            return user;
+        } else {
+            //如果当前账户绑定的Id和现在需要绑定的不同
+            //则退出之前的设备，达到单点登录，
+            //给之前的设备推送一条退出消息
+            if (Strings.isNullOrEmpty(user.getPushId())) {
+                //TODO 推送一个退出消息
+            }
+            //更新新的设备id
+            user.setPushId(pushId);
+            return Hib.query(session -> {
+                session.saveOrUpdate(user);
+                return user;
+            });
+        }
+    }
+
+    /**
      * 使用账户和密码进行登录
      *
      * @param account  账户
@@ -36,7 +95,7 @@ public class UserFactory {
      */
     public static User login(String account, String password) {
         final String accountStr = account.trim();
-        //把要登陆的账户的密码进行加密后才能与数据库比对
+        //进行一次密码加密，与数据库比对
         final String encodePassword = encodePassword(password);
         User user = Hib.query(session -> (User) session
                 .createQuery("from User where phone=:phone and password=:password")
@@ -45,7 +104,7 @@ public class UserFactory {
                 .uniqueResult());
 
         if (user != null) {
-            //对User进行登录操作，更新Token
+            //对user进行登录，更新Token
             user = login(user);
         }
         return user;
@@ -89,7 +148,10 @@ public class UserFactory {
         user.setPhone(account);
 
         //数据库存储
-        return Hib.query(session -> (User) session.save(user));
+        return Hib.query(session -> {
+            session.save(user);
+            return user;
+        });
     }
 
     /**

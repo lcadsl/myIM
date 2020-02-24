@@ -8,14 +8,14 @@ import java.util.logging.Logger;
 
 public class Application extends ResourceConfig {
     public Application(){
-        //æ³¨å†Œé€»è¾‘å¤„ç†çš„åŒ…å
+        //×¢²áÂß¼­´¦ÀíµÄ°üµÄÃû×Ö
         //packages("net.lcadsl.web.qintalker.push.service");
         packages(AccountService.class.getPackage().getName());
-        //Jsonè§£æå™¨
+        //Json½âÎöÆ÷
         //register(JacksonJsonProvider.class);
-        //æ›¿æ¢è§£æå™¨ä¸ºGson
+        //Ìæ»»½âÎöÆ÷ÎªGson
         register(GsonProvider.class);
-        //æ—¥å¿—æ‰“å°è¾“å‡º
+        //ÈÕÖ¾´òÓ¡Êä³ö
         register(Logger.class);
     }
 }
