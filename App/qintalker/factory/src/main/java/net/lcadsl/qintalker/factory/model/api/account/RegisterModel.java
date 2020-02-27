@@ -56,7 +56,7 @@ public class RegisterModel {
     @Override
     public String toString() {
         return "RegisterModel{" +
-                "account='" + account + '\'' +
+                "Account='" + account + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", pushId='" + pushId + '\'' +

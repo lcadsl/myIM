@@ -51,7 +51,7 @@ public class AccountRspModel {
     public String toString() {
         return "AccountRspModel{" +
                 "user=" + user +
-                ", account='" + account + '\'' +
+                ", Account='" + account + '\'' +
                 ", token='" + token + '\'' +
                 ", isBand=" + isBand +
                 '}';

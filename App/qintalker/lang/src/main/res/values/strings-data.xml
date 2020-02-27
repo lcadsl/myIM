@@ -19,8 +19,8 @@
     <string name="data_rsp_error_create_group">添加群失败!</string>
     <string name="data_rsp_error_create_message">添加消息失败!</string>
     <string name="data_rsp_error_parameters">抱歉，参数错误哦! O_o</string>
-    <string name="data_rsp_error_parameters_exist_account">搞啥，已有该账户!</string>
-    <string name="data_rsp_error_parameters_exist_name">搞啥已有该用户名!</string>
+    <string name="data_rsp_error_parameters_exist_account">已有该账户!手机号已被注册</string>
+    <string name="data_rsp_error_parameters_exist_name">已有该用户名!昵称已被注册</string>
     <string name="data_rsp_error_account_token">重新登录 ..@_@|||||..</string>
     <string name="data_rsp_error_account_login">登录失败，是那里没搞定么? §^_^§</string>
     <string name="data_rsp_error_account_register">抱歉，注册失败!  ^_^|||</string>
