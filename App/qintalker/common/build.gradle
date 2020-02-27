@@ -36,18 +36,18 @@ dependencies {
 
     api "com.android.support:design:$rootProject.ext.supportVersion"
 
-    implementation "net.qiujuer.genius:ui:$rootProject.ext.geniusVersion"
-    implementation "net.qiujuer.genius:res:$rootProject.ext.geniusVersion"
+    api "net.qiujuer.genius:ui:$rootProject.ext.geniusVersion"
+    api "net.qiujuer.genius:res:$rootProject.ext.geniusVersion"
 
-    implementation "de.hdodenhof:circleimageview:$rootProject.ext.circleimageviewVersion"
-    implementation "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
+    api "de.hdodenhof:circleimageview:$rootProject.ext.circleimageviewVersion"
+    api "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
 
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
+    api "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
     annotationProcessor"com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
     implementation project(path: ':lang')
-    implementation "net.qiujuer.genius:kit-handler:$rootProject.ext.geniusVersion"
+    api "net.qiujuer.genius:kit-handler:$rootProject.ext.geniusVersion"
 }

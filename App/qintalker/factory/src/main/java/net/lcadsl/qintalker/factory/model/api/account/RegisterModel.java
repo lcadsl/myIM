@@ -1,4 +1,4 @@
-package net.lcadsl.qintalker.factory.model.api;
+package net.lcadsl.qintalker.factory.model.api.account;
 
 /**
  * 注册使用的请求Model
