@@ -13,6 +13,7 @@ import android.view.View;
 
 import net.lcadsl.qintalker.common.app.Activity;
 import net.lcadsl.qintalker.factory.persistence.Account;
+import net.lcadsl.qintalker.push.activities.AccountActivity;
 import net.lcadsl.qintalker.push.activities.MainActivity;
 import net.lcadsl.qintalker.push.frags.assist.PermissionsFragment;
 import net.qiujuer.genius.res.Resource;
@@ -63,11 +64,23 @@ public class LaunchActivity extends Activity {
      * 等待个推框架对pushId设置好值
      */
     private void waitPushReceiverId() {
-        //如果拿到
-        if (!TextUtils.isEmpty(Account.getPushId())) {
-            skip();
-            return;
+        if (Account.isLogin()) {
+            //已经登录的情况下判断是否绑定
+            //如果没有绑定则等待进行绑定
+            if (Account.isBind()) {
+                skip();
+                return;
+            }
+        } else {
+            //没有登录
+            // 如果拿到PushId,没有登录的情况下不能绑定PushId
+            if (!TextUtils.isEmpty(Account.getPushId())) {
+                skip();
+                return;
+            }
         }
+
+
         //循环等待
         getWindow().getDecorView()
                 .postDelayed(new Runnable() {
@@ -93,7 +106,12 @@ public class LaunchActivity extends Activity {
     private void reallySkip() {
         //权限检测，跳转
         if (PermissionsFragment.haveAll(this, getSupportFragmentManager())) {
-            MainActivity.show(this);
+            //检查跳转到主页还是登录
+            if (Account.isLogin()) {
+                MainActivity.show(this);
+            } else {
+                AccountActivity.show(this);
+            }
             finish();
         }
     }

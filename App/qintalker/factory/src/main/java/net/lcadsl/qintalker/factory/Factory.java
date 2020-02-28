@@ -4,10 +4,14 @@ import android.support.annotation.StringRes;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 import net.lcadsl.qintalker.common.app.Application;
 import net.lcadsl.qintalker.factory.data.DataSource;
 import net.lcadsl.qintalker.factory.model.api.RspModel;
+import net.lcadsl.qintalker.factory.persistence.Account;
+import net.lcadsl.qintalker.factory.utils.DBFlowExclusionStrategy;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -30,9 +34,23 @@ public class Factory {
         gson = new GsonBuilder()
                 //设置时间格式
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                //TODO设置一个过滤器，数据库级别的Model不进行Json转换
-                //.setExclusionStrategies()
+                //  设置一个过滤器，数据库级别的Model不进行Json转换
+                .setExclusionStrategies(new DBFlowExclusionStrategy())
                 .create();
+    }
+
+
+    /**
+     * Factory中的初始化
+     */
+    public static void setup(){
+        //初始化数据库
+        FlowManager.init(new FlowConfig.Builder(app())
+        .openDatabasesOnInit(true)//数据库初始化的时候就开始打开
+        .build());
+
+        //持久化的数据进行初始化
+        Account.load(app());
     }
 
     /**
@@ -142,5 +160,14 @@ public class Factory {
      */
     private void logout(){
 
+    }
+
+
+    /**
+     * 处理推送来的消息
+     * @param message   消息
+     */
+    public static void dispatchPush(String message){
+        //TODO
     }
 }
