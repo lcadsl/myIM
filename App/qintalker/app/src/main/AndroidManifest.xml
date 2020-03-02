@@ -67,7 +67,7 @@
             android:name=".activities.UserActivity"
             android:label="UserActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme.Account"/>
 
 
         <!-- Android7 FileProvider 适配 -->

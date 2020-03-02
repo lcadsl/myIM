@@ -3,6 +3,7 @@ package net.lcadsl.qintalker.push.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
@@ -21,6 +22,8 @@ import com.bumptech.glide.request.target.ViewTarget;
 
 import net.lcadsl.qintalker.common.app.Activity;
 import net.lcadsl.qintalker.common.widget.PortraitView;
+import net.lcadsl.qintalker.factory.model.db.User;
+import net.lcadsl.qintalker.factory.persistence.Account;
 import net.lcadsl.qintalker.push.R;
 import net.lcadsl.qintalker.push.activities.AccountActivity;
 import net.lcadsl.qintalker.push.frags.assist.PermissionsFragment;
@@ -69,6 +72,17 @@ public class MainActivity extends Activity
         context.startActivity(new Intent(context,MainActivity.class));
     }
 
+
+    @Override
+    protected boolean initArgs(Bundle bundle) {
+        if (Account.isComplete()) {
+            //判断用户是否完全，完全则走正常流程
+            return super.initArgs(bundle);
+        }else {
+            UserActivity.show(this);
+            return false;
+        }
+    }
 
     @Override
     protected int getContentLayoutId() {
