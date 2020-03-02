@@ -17,22 +17,21 @@ public class UserActivity extends Activity {
         return R.layout.activity_user;
     }
 
+
     @Override
     protected void initWidget() {
         super.initWidget();
+
         mCurFragment = new UpdateInfoFragment();
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.lay_container,mCurFragment)
+                .add(R.id.lay_container, mCurFragment)
                 .commit();
     }
 
-
-
+    // Activity中收到剪切图片成功的回调
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mCurFragment.onActivityResult(requestCode,resultCode,data);
+        mCurFragment.onActivityResult(requestCode, resultCode, data);
     }
-
-
 }

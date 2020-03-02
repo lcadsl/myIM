@@ -4,32 +4,28 @@ import android.support.annotation.StringRes;
 
 
 /**
- * 公共基本契约
+ * MVP模式中公共的基本契约
+ *
+ *
+ * @version 1.0.0
  */
-
 public interface BaseContract {
-
     interface View<T extends Presenter> {
-
-
-        //公共的显示字符串错误
+        // 公共的：显示一个字符串错误
         void showError(@StringRes int str);
 
-        //公共的显示进度条
+        // 公共的：显示进度条
         void showLoading();
 
-        //支持设置一个Presenter
+        // 支持设置一个Presenter
         void setPresenter(T presenter);
     }
 
-
     interface Presenter {
-
-
-        //公用的的开始方法
+        // 共用的开始触发
         void start();
 
-        //公用的销毁
+        // 共用的销毁触发
         void destroy();
     }
 }

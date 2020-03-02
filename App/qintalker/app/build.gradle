@@ -17,6 +17,8 @@ android {
                 GETUI_APP_KEY   : "6ozhc1AkXK85mLYhXsW5o3",
                 GETUI_APP_SECRET: "1KCqN2Xznp6URLtdkZsUp7",
         ]
+
+
     }
     buildTypes {
         release {
@@ -32,6 +34,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
 
     }
+
+
 }
 
 dependencies {

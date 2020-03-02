@@ -10,7 +10,7 @@ public class RegisterModel {
     private String pushId;
 
     public RegisterModel(String account, String password, String name) {
-        this(account,password,name,null);
+        this(account, password, name, null);
     }
 
     public RegisterModel(String account, String password, String name, String pushId) {
@@ -52,14 +52,14 @@ public class RegisterModel {
         this.pushId = pushId;
     }
 
-
     @Override
     public String toString() {
         return "RegisterModel{" +
-                "Account='" + account + '\'' +
+                "account='" + account + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", pushId='" + pushId + '\'' +
                 '}';
     }
 }
+

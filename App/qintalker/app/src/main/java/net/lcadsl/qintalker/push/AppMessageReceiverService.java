@@ -1,21 +1,20 @@
 
-        package net.lcadsl.qintalker.push;
+package net.lcadsl.qintalker.push;
 
-        import android.content.Context;
-        import android.util.Log;
+import android.content.Context;
+import android.util.Log;
 
-        import com.igexin.sdk.GTIntentService;
-        import com.igexin.sdk.message.GTCmdMessage;
-        import com.igexin.sdk.message.GTNotificationMessage;
-        import com.igexin.sdk.message.GTTransmitMessage;
+import com.igexin.sdk.GTIntentService;
+import com.igexin.sdk.message.GTCmdMessage;
+import com.igexin.sdk.message.GTNotificationMessage;
+import com.igexin.sdk.message.GTTransmitMessage;
 
-        import net.lcadsl.qintalker.factory.Factory;
-        import net.lcadsl.qintalker.factory.data.helper.AccountHelper;
-        import net.lcadsl.qintalker.factory.persistence.Account;
+import net.lcadsl.qintalker.factory.Factory;
+import net.lcadsl.qintalker.factory.data.helper.AccountHelper;
+import net.lcadsl.qintalker.factory.persistence.Account;
 
 /**
- * 个推接收消息的IntentService，用以接收具体的消息信息
- * 替换之前老版本的消息广播
+ * 个推接收消息的IntentService，用以接收具体的消息信息 替换之前老版本的消息广播
  */
 public class AppMessageReceiverService extends GTIntentService {
     @Override

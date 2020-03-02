@@ -22,12 +22,14 @@ import butterknife.OnClick;
  * 登录的界面
  */
 public class LoginFragment extends PresenterFragment<LoginContract.Presenter>
-implements LoginContract.View{
+        implements LoginContract.View {
     private AccountTrigger mAccountTrigger;
+
     @BindView(R.id.edit_phone)
     EditText mPhone;
     @BindView(R.id.edit_password)
     EditText mPassword;
+
     @BindView(R.id.loading)
     Loading mLoading;
 
@@ -42,9 +44,8 @@ implements LoginContract.View{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        //拿到activity的引用
-        mAccountTrigger= (AccountTrigger) context;
+        // 拿到我们的Activity的引用
+        mAccountTrigger = (AccountTrigger) context;
     }
 
     @Override
@@ -57,55 +58,52 @@ implements LoginContract.View{
         return R.layout.fragment_login;
     }
 
+
     @OnClick(R.id.btn_submit)
-    void onSubmitClick(){
-        String phone=mPhone.getText().toString();
-        String password=mPassword.getText().toString();
-        //调用P层进行注册
-        mPresenter.login(phone,password);
+    void onSubmitClick() {
+        String phone = mPhone.getText().toString();
+        String password = mPassword.getText().toString();
+        // 调用P层进行注册
+        mPresenter.login(phone, password);
     }
 
     @OnClick(R.id.txt_go_register)
-    void onShowRegisterClick(){
-        //让AccountActivity进行界面切换
+    void onShowRegisterClick() {
+        // 让AccountActivity进行界面切换
         mAccountTrigger.triggerView();
     }
 
     @Override
     public void showError(int str) {
         super.showError(str);
-        //当提示需要显示错误时触发，一定是结束了
+        // 当需要显示错误的时候触发，一定是结束了
 
-        //停止loading
+        // 停止Loading
         mLoading.stop();
-        //让控件可以输入
+        // 让控件可以输入
         mPhone.setEnabled(true);
         mPassword.setEnabled(true);
-        //提交按钮可以继续点击
+        // 提交按钮可以继续点击
         mSubmit.setEnabled(true);
     }
-
 
     @Override
     public void showLoading() {
         super.showLoading();
 
-        //正在进行登录，界面不可操作
-        //开始Loading
+        // 正在进行时，正在进行注册，界面不可操作
+        // 开始Loading
         mLoading.start();
-        //让控件不可以输入
+        // 让控件不可以输入
         mPhone.setEnabled(false);
         mPassword.setEnabled(false);
-        //提交按钮不可以继续点击
+        // 提交按钮不可以继续点击
         mSubmit.setEnabled(false);
-
     }
 
     @Override
     public void loginSuccess() {
-        //需要进行跳转到MainActivity
         MainActivity.show(getContext());
-        //关闭当前界面
         getActivity().finish();
     }
 }

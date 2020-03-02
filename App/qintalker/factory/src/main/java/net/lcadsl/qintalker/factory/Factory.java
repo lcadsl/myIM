@@ -17,39 +17,39 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class Factory {
-    //单例模式
+    // 单例模式ø
     private static final Factory instance;
-    //全局的线程池
+    // 全局的线程池
     private final Executor executor;
-    //全局的json
+    // 全局的Gson
     private final Gson gson;
+
 
     static {
         instance = new Factory();
     }
 
     private Factory() {
-        //新建一个四个线程的线程池
+        // 新建一个4个线程的线程池
         executor = Executors.newFixedThreadPool(4);
         gson = new GsonBuilder()
-                //设置时间格式
+                // 设置时间格式
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-                //  设置一个过滤器，数据库级别的Model不进行Json转换
+                // 设置一个过滤器，数据库级别的Model不进行Json转换
                 .setExclusionStrategies(new DBFlowExclusionStrategy())
                 .create();
     }
 
-
     /**
-     * Factory中的初始化
+     * Factory 中的初始化
      */
-    public static void setup(){
-        //初始化数据库
+    public static void setup() {
+        // 初始化数据库
         FlowManager.init(new FlowConfig.Builder(app())
-        .openDatabasesOnInit(true)//数据库初始化的时候就开始打开
-        .build());
+                .openDatabasesOnInit(true) // 数据库初始化的时候就开始打开
+                .build());
 
-        //持久化的数据进行初始化
+        // 持久化的数据进行初始化
         Account.load(app());
     }
 
@@ -62,19 +62,19 @@ public class Factory {
         return Application.getInstance();
     }
 
+
     /**
      * 异步运行的方法
      *
      * @param runnable Runnable
      */
-    //runOnAsync异步
     public static void runOnAsync(Runnable runnable) {
-        //拿到单例拿到线程池然后异步执行
+        // 拿到单例，拿到线程池，然后异步执行
         instance.executor.execute(runnable);
     }
 
     /**
-     * 返回一个全局的Gson，在这里可以进行Gson全局的初始化
+     * 返回一个全局的Gson，在这可以进行Gson的一些全局的初始化
      *
      * @return Gson
      */
@@ -82,18 +82,19 @@ public class Factory {
         return instance.gson;
     }
 
+
     /**
-     * 进行错误数据的解析，把网络返回的code值进行解读，并返回为一个String
+     * 进行错误Code的解析，
+     * 把网络返回的Code值进行统一的规划并返回为一个String资源
      *
      * @param model    RspModel
-     * @param callback DataSource.FailedCallback    用于返回一个错误的资源ID
+     * @param callback DataSource.FailedCallback 用于返回一个错误的资源Id
      */
     public static void decodeRspCode(RspModel model, DataSource.FailedCallback callback) {
         if (model == null)
             return;
 
-
-        //进行Code区分
+        // 进行Code区分
         switch (model.getCode()) {
             case RspModel.SUCCEED:
                 return;
@@ -144,30 +145,31 @@ public class Factory {
             default:
                 decodeRspCode(R.string.data_rsp_error_unknown, callback);
                 break;
-
-
         }
     }
 
-
-    private static void decodeRspCode(@StringRes final int resId, final DataSource.FailedCallback callback) {
+    private static void decodeRspCode(@StringRes final int resId,
+                                      final DataSource.FailedCallback callback) {
         if (callback != null)
             callback.onDataNotAvailable(resId);
     }
 
+
     /**
      * 收到账户退出的消息需要进行账户退出重新登录
      */
-    private void logout(){
+    private void logout() {
 
     }
 
 
     /**
      * 处理推送来的消息
-     * @param message   消息
+     *
+     * @param message 消息
      */
-    public static void dispatchPush(String message){
-        //TODO
+    public static void dispatchPush(String message) {
+        // TODO
     }
+
 }

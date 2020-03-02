@@ -10,10 +10,10 @@ import java.util.Date;
 
 @Table(database = AppDatabase.class)
 public class User extends BaseModel {
-    public static final int SEX_MAN=1;
-    public static final int SEX_WOMAN=2;
+    public static final int SEX_MAN = 1;
+    public static final int SEX_WOMAN = 2;
 
-
+    // 主键
     @PrimaryKey
     private String id;
     @Column
@@ -27,27 +27,25 @@ public class User extends BaseModel {
     @Column
     private int sex = 0;
 
-    //我对某人的备注信息
+    // 我对某人的备注信息，也应该写入到数据库中
     @Column
     private String alias;
 
-
-    //用户关注人的数量
+    // 用户关注人的数量
     @Column
     private int follows;
 
-    //粉丝数量
+    // 用户粉丝的数量
     @Column
     private int following;
 
-    //我是否已经关注此人
+    // 我与当前User的关系状态，是否已经关注了这个人
     @Column
     private boolean isFollow;
 
-    //时间
+    // 时间字段
     @Column
     private Date modifyAt;
-
 
     public String getId() {
         return id;

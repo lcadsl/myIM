@@ -3,17 +3,15 @@ package net.lcadsl.qintalker.factory.model.api.account;
 import net.lcadsl.qintalker.factory.model.db.User;
 
 public class AccountRspModel {
-
+    // 用户基本信息
     private User user;
-
+    // 当前登录的账号
     private String account;
-
+    // 当前登录成功后获取的Token,
+    // 可以通过Token获取用户的所有信息
     private String token;
-
-    private boolean isBand;
-
-
-
+    // 标示是否已经绑定到了设备PushId
+    private boolean isBind;
 
     public User getUser() {
         return user;
@@ -39,21 +37,21 @@ public class AccountRspModel {
         this.token = token;
     }
 
-    public boolean isBand() {
-        return isBand;
+    public boolean isBind() {
+        return isBind;
     }
 
-    public void setBand(boolean band) {
-        isBand = band;
+    public void setBind(boolean bind) {
+        isBind = bind;
     }
 
     @Override
     public String toString() {
         return "AccountRspModel{" +
                 "user=" + user +
-                ", Account='" + account + '\'' +
+                ", account='" + account + '\'' +
                 ", token='" + token + '\'' +
-                ", isBand=" + isBand +
+                ", isBind=" + isBind +
                 '}';
     }
 }
