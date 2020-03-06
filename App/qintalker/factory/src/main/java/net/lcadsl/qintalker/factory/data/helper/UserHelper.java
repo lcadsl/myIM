@@ -10,6 +10,7 @@ import net.lcadsl.qintalker.factory.model.card.UserCard;
 import net.lcadsl.qintalker.factory.model.db.User;
 import net.lcadsl.qintalker.factory.net.Network;
 import net.lcadsl.qintalker.factory.net.RemoteService;
+import net.lcadsl.qintalker.factory.presenter.contact.FollowPresenter;
 
 import java.util.List;
 
@@ -76,5 +77,40 @@ public class UserHelper {
 
         //把当前的调度者返回
         return call;
+    }
+
+
+    //关注的网络请求
+    public static void follow(String id, final DataSource.Callback<UserCard> callback) {
+        RemoteService service = Network.remote();
+        // 得到一个Call
+        Call<RspModel<UserCard>> call = service.userFollow(id);
+
+        call.enqueue(new Callback<RspModel<UserCard>>() {
+            @Override
+            public void onResponse(Call<RspModel<UserCard>> call, Response<RspModel<UserCard>> response) {
+                RspModel<UserCard> rspModel = response.body();
+                if (rspModel.success()) {
+                    UserCard userCard=rspModel.getResult();
+                    //保存到本地数据库
+                    User user=userCard.build();
+                    user.save();
+                    //TODO 通知联系人列表刷新
+
+
+                    //返回数据
+                    callback.onDataLoaded(userCard);
+                } else {
+                    Factory.decodeRspCode(rspModel, callback);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RspModel<UserCard>>call, Throwable t) {
+                callback.onDataNotAvailable(R.string.data_network_error);
+            }
+        });
+
+
     }
 }
