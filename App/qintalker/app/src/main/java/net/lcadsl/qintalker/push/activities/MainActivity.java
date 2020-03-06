@@ -66,10 +66,11 @@ public class MainActivity extends Activity
 
     /**
      * MainActivity显示的入口
+     *
      * @param context 上下文
      */
-    public static void show(Context context){
-        context.startActivity(new Intent(context,MainActivity.class));
+    public static void show(Context context) {
+        context.startActivity(new Intent(context, MainActivity.class));
     }
 
 
@@ -78,7 +79,7 @@ public class MainActivity extends Activity
         if (Account.isComplete()) {
             //判断用户是否完全，完全则走正常流程
             return super.initArgs(bundle);
-        }else {
+        } else {
             UserActivity.show(this);
             return false;
         }
@@ -129,12 +130,24 @@ public class MainActivity extends Activity
 
     @OnClick(R.id.im_search)
     void onSearchMenuClick() {
-
+        //在群的界面的时候，点击顶部搜索就进入群搜索界面
+        //其他时候点击进入人搜索界面
+        int type = Objects.equals(mNavHelper.getCurrentTab().extra, R.string.title_group) ?
+                SearchActivity.TYPE_GROUP:SearchActivity.TYPE_USER;
+        SearchActivity.show(this, type);
     }
 
     @OnClick(R.id.btn_action)
     void onActionClick() {
-        AccountActivity.show(this);
+        //浮动按钮点击，判断当前界面是群还是联系人
+        //如果是群则打开群创建界面
+
+        if (Objects.equals(mNavHelper.getCurrentTab().extra, R.string.title_group)) {
+            //TODO 打开群创建界面
+        } else {
+            //如果是其他则打开添加用户界面
+            SearchActivity.show(this, SearchActivity.TYPE_USER);
+        }
     }
 
 

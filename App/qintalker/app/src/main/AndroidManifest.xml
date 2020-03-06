@@ -31,8 +31,7 @@
             android:exported="true"
             android:label="AppPushService"
             android:permission="1000"
-            android:process=":pushservice"/>
-        <!-- 个推的消息送达服务，用以接收AppPushService处理后的有效消息接收，类似于之前的广播 -->
+            android:process=":pushservice" /> <!-- 个推的消息送达服务，用以接收AppPushService处理后的有效消息接收，类似于之前的广播 -->
         <service
             android:name=".AppMessageReceiverService"
             android:enabled="true"
@@ -40,10 +39,10 @@
             android:label="AppMessageReceiverService"
             android:permission="1000" />
 
-
         <activity
             android:name=".LaunchActivity"
             android:label="@string/title_activity_launch"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.TransStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,7 +53,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Main"/>
+            android:theme="@style/AppTheme.Main" />
         <activity
             android:name=".activities.AccountActivity"
             android:screenOrientation="portrait"
@@ -65,9 +64,16 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.UserActivity"
-            android:label="UserActivity"
+            android:label="@string/title_activity_user"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Account"/>
+            android:theme="@style/AppTheme.Account" />
+        <activity
+            android:name=".activities.SearchActivity"
+            android:label="@string/title_search"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.TransStatusBar"/>
+
+
 
 
         <!-- Android7 FileProvider 适配 -->

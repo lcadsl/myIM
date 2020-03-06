@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.lcadsl.qintalker.common.widget.convention.PlaceHolderView;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -16,6 +18,7 @@ public abstract class Fragment extends android.support.v4.app.Fragment {
     //保存root，以便复用
     protected View mRoot;
     protected Unbinder mRootUnBinder;
+    protected PlaceHolderView mPlaceHolderView;
 
 
 
@@ -76,5 +79,14 @@ public abstract class Fragment extends android.support.v4.app.Fragment {
     //返回false 代表没有处理，activity自己走自己的逻辑
     public boolean onBackPressed(){
         return false;
+    }
+
+
+    /**
+     * 设置占位布局
+     * @param placeHolderView   继承了占位布局规范的View
+     */
+    public void setPlaceHolderView(PlaceHolderView placeHolderView){
+        this.mPlaceHolderView=placeHolderView;
     }
 }
