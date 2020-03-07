@@ -23,7 +23,10 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup"
         tools:targetApi="m">
-
+        <activity
+            android:name=".activities.MessageActivity"
+            android:label="@string/title_activity_message"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <!-- 个推的Service服务,维持长链接接收消息，process 名字不可更改 -->
         <service
             android:name=".AppPushService"
@@ -71,12 +74,7 @@
             android:name=".activities.SearchActivity"
             android:label="@string/title_search"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.TransStatusBar"/>
-
-
-
-
-        <!-- Android7 FileProvider 适配 -->
+            android:theme="@style/AppTheme.TransStatusBar" /> <!-- Android7 FileProvider 适配 -->
         <provider
             android:name=".AppFileProvider"
             android:authorities="${applicationId}.provider"

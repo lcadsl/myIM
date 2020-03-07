@@ -115,7 +115,7 @@ public class SearchUserFragment extends PresenterFragment<SearchContract.Present
 
     //每一个cell的布局操作
     class ViewHolder extends RecyclerAdapter.ViewHolder<UserCard>
-    implements FollowContract.View {
+            implements FollowContract.View {
         @BindView(R.id.im_portrait)
         PortraitView mPortraitView;
 
@@ -136,29 +136,23 @@ public class SearchUserFragment extends PresenterFragment<SearchContract.Present
 
         @Override
         protected void onBind(UserCard userCard) {
-            Glide.with(SearchUserFragment.this)
-                    .load(userCard.getPortrait())
-                    .centerCrop()
-                    .into(mPortraitView);
-
+            mPortraitView.setup(Glide.with(SearchUserFragment.this), userCard);
             mName.setText(userCard.getName());
-
             mFollow.setEnabled(!userCard.isFollow());
         }
 
         @OnClick(R.id.im_follow)
-        void onFollowClick(){
+        void onFollowClick() {
             //发起关注
             mPresenter.follow(mData.getId());
         }
 
 
-
         @Override
         public void showError(int str) {
             //失败则停止动画，并且显示一个圆圈
-            if (mFollow.getDrawable() instanceof LoadingDrawable){
-                LoadingDrawable drawable=(LoadingDrawable)mFollow.getDrawable();
+            if (mFollow.getDrawable() instanceof LoadingDrawable) {
+                LoadingDrawable drawable = (LoadingDrawable) mFollow.getDrawable();
                 drawable.setProgress(1);
                 drawable.stop();
             }
@@ -166,14 +160,14 @@ public class SearchUserFragment extends PresenterFragment<SearchContract.Present
 
         @Override
         public void showLoading() {
-            int minSize= (int) Ui.dipToPx(getResources(),22);
-            int maxSize= (int) Ui.dipToPx(getResources(),30);
+            int minSize = (int) Ui.dipToPx(getResources(), 22);
+            int maxSize = (int) Ui.dipToPx(getResources(), 30);
             //初始化一个圆形的动画
-            LoadingDrawable drawable=new LoadingCircleDrawable(minSize,maxSize);
+            LoadingDrawable drawable = new LoadingCircleDrawable(minSize, maxSize);
             drawable.setBackgroundColor(0);
 
 
-            int[] color=new int[]{UiCompat.getColor(getResources(),R.color.white_alpha_208)};
+            int[] color = new int[]{UiCompat.getColor(getResources(), R.color.white_alpha_208)};
             drawable.setForegroundColor(color);
             mFollow.setImageDrawable(drawable);
             //启动动画
@@ -182,15 +176,15 @@ public class SearchUserFragment extends PresenterFragment<SearchContract.Present
 
         @Override
         public void setPresenter(FollowContract.Presenter presenter) {
-            mPresenter=presenter;
+            mPresenter = presenter;
         }
 
 
         @Override
         public void onFollowSucceed(UserCard userCard) {
             //更改当前Drawable状态
-            if (mFollow.getDrawable() instanceof LoadingDrawable){
-                ((LoadingDrawable)mFollow.getDrawable()).stop();
+            if (mFollow.getDrawable() instanceof LoadingDrawable) {
+                ((LoadingDrawable) mFollow.getDrawable()).stop();
                 //设置为默认的
                 mFollow.setImageResource(R.drawable.sel_opt_done_add);
             }

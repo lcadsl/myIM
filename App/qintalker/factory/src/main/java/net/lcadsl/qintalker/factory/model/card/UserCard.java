@@ -2,12 +2,13 @@ package net.lcadsl.qintalker.factory.model.card;
 
 import com.google.gson.annotations.Expose;
 
+import net.lcadsl.qintalker.factory.model.Author;
 import net.lcadsl.qintalker.factory.model.db.User;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class UserCard {
+public class UserCard implements Author {
 
     private String id;
 

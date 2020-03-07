@@ -19,9 +19,8 @@ public abstract class Fragment extends android.support.v4.app.Fragment {
     protected View mRoot;
     protected Unbinder mRootUnBinder;
     protected PlaceHolderView mPlaceHolderView;
-
-
-
+    //是否第一次初始化数据
+    protected boolean mIsFirstInitData = true;
 
 
     @Override
@@ -40,9 +39,9 @@ public abstract class Fragment extends android.support.v4.app.Fragment {
             View root = inflater.inflate(layId, container, false);
             initWidget(root);
             mRoot = root;
-        }else {
-            if(mRoot.getParent()!=null){
-                ((ViewGroup)mRoot.getParent()).removeView(mRoot);
+        } else {
+            if (mRoot.getParent() != null) {
+                ((ViewGroup) mRoot.getParent()).removeView(mRoot);
             }
         }
 
@@ -54,12 +53,18 @@ public abstract class Fragment extends android.support.v4.app.Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (mIsFirstInitData) {
+            //触发一次后就不会触发
+            mIsFirstInitData = false;
+            //首次初始化
+            onFirstInit();
+        }
 
         initData();
     }
 
     //初始化相关参数，初始化正确返回true
-    protected void initArgs(Bundle bundle){
+    protected void initArgs(Bundle bundle) {
 
     }
 
@@ -68,25 +73,34 @@ public abstract class Fragment extends android.support.v4.app.Fragment {
     protected abstract int getContentLayoutId();
 
 
-    protected void initWidget(View root){
-        mRootUnBinder = ButterKnife.bind(this,root);
+    protected void initWidget(View root) {
+        mRootUnBinder = ButterKnife.bind(this, root);
     }
 
-    protected void initData(){
+    protected void initData() {
 
     }
+
+    /**
+     * 当首次初始化数据时会调用
+     */
+    protected void onFirstInit() {
+
+    }
+
     //返回键逻辑 返回true代表已处理返回逻辑，activity中不用finish，
     //返回false 代表没有处理，activity自己走自己的逻辑
-    public boolean onBackPressed(){
+    public boolean onBackPressed() {
         return false;
     }
 
 
     /**
      * 设置占位布局
-     * @param placeHolderView   继承了占位布局规范的View
+     *
+     * @param placeHolderView 继承了占位布局规范的View
      */
-    public void setPlaceHolderView(PlaceHolderView placeHolderView){
-        this.mPlaceHolderView=placeHolderView;
+    public void setPlaceHolderView(PlaceHolderView placeHolderView) {
+        this.mPlaceHolderView = placeHolderView;
     }
 }
