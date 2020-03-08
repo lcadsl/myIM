@@ -101,6 +101,12 @@ public abstract class RecyclerAdapter<Data>
         return mDataList.size();
     }
 
+
+    //返回整个集合
+    public List<Data> getItems() {
+        return mDataList;
+    }
+
     //插入一条数据并通知插入
     public void add(Data data) {
         mDataList.add(data);
@@ -145,7 +151,7 @@ public abstract class RecyclerAdapter<Data>
     public void update(Data data, ViewHolder<Data> holder) {
 //        得到当前viewholder的坐标
         int pos = holder.getAdapterPosition();
-        if (pos >= 0){
+        if (pos >= 0) {
 //            进行数据移除与更新
             mDataList.remove(pos);
             mDataList.add(pos, data);
@@ -231,9 +237,10 @@ public abstract class RecyclerAdapter<Data>
 
     /**
      * 对回调接口做一次实现AdapterListener
+     *
      * @param <Data>
      */
-    public static abstract class AdapterListenerImpl<Data> implements AdapterListener<Data>{
+    public static abstract class AdapterListenerImpl<Data> implements AdapterListener<Data> {
 
         @Override
         public void onItemClick(ViewHolder holder, Data data) {
