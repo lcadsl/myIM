@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources tools:ignore="ExtraTranslation" xmlns:tools="http://schemas.android.com/tools">
     <string name="label_permission_network">网络访问</string>
     <string name="label_permission_network_desc">用于即时通讯传输</string>
     <string name="label_permission_read">读取文件</string>
@@ -27,8 +27,8 @@
     <string name="label_go_register">没有账户？去注册</string>
     <string name="label_go_login">已有账户？去登录</string>
 
-    <string name="label_follows">Follows\n%s</string>
-    <string name="label_following">Following\n%s</string>
+    <string name="label_follows">粉丝\n%s</string>
+    <string name="label_following">关注\n%s</string>
     <string name="label_gallery_select_max_size">至多选择%s张</string>
     <string name="label_gallery_selected_size">已选%s张</string>
 

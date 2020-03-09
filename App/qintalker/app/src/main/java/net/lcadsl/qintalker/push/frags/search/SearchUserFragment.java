@@ -24,6 +24,7 @@ import net.lcadsl.qintalker.factory.presenter.contact.FollowPresenter;
 import net.lcadsl.qintalker.factory.presenter.search.SearchContract;
 import net.lcadsl.qintalker.factory.presenter.search.SearchUserPresenter;
 import net.lcadsl.qintalker.push.R;
+import net.lcadsl.qintalker.push.activities.PersonalActivity;
 import net.lcadsl.qintalker.push.activities.SearchActivity;
 import net.qiujuer.genius.ui.Ui;
 import net.qiujuer.genius.ui.compat.UiCompat;
@@ -140,6 +141,13 @@ public class SearchUserFragment extends PresenterFragment<SearchContract.Present
             mName.setText(userCard.getName());
             mFollow.setEnabled(!userCard.isFollow());
         }
+
+        @OnClick(R.id.im_portrait)
+        void onPortraitClick() {
+            //显示信息
+            PersonalActivity.show(getContext(),mData.getId());
+        }
+
 
         @OnClick(R.id.im_follow)
         void onFollowClick() {

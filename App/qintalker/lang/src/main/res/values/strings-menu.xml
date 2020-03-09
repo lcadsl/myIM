@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources tools:ignore="ExtraTranslation" xmlns:tools="http://schemas.android.com/tools">
     <string name="action_home">Home</string>
     <string name="action_group">Group</string>
     <string name="action_contact">Contact</string>

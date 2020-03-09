@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources tools:ignore="ExtraTranslation" xmlns:tools="http://schemas.android.com/tools">
     <string name="data_account_login_invalid_parameter">账户名密码不能为空！</string>
     <string name="data_account_login_error_validate">账户或密码验证错误</string>
     <string name="data_account_register_invalid_parameter_mobile">请输入正确的手机号!</string>
