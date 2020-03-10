@@ -38,7 +38,7 @@ public class UserHelper {
                     //数据库的存储操作，需要把UserCard转换为User
                     //保存用户信息
                     User user = userCard.build();
-                    user.save();
+                    DbHelper.save(User.class, user);
                     //返回成功
                     callback.onDataLoaded(userCard);
                 } else {
@@ -96,10 +96,9 @@ public class UserHelper {
                 RspModel<UserCard> rspModel = response.body();
                 if (rspModel.success()) {
                     UserCard userCard = rspModel.getResult();
-                    //保存到本地数据库
+                    //保存到本地数据库,并通知联系人列表刷新
                     User user = userCard.build();
-                    user.save();
-                    //TODO 通知联系人列表刷新
+                    DbHelper.save(User.class,user);
 
 
                     //返回数据
@@ -145,23 +144,23 @@ public class UserHelper {
 
 
     //从本地查询一个用户的信息
-    public static User findFromLocal(String id){
+    public static User findFromLocal(String id) {
         return SQLite.select()
                 .from(User.class)
                 .where(User_Table.id.eq(id))
                 .querySingle();
     }
-
+    //从网络查询一个用户的信息
     public static User findFromNet(String id) {
         RemoteService remoteService = Network.remote();
         try {
             Response<RspModel<UserCard>> response = remoteService.userFind(id).execute();
-            UserCard card=response.body().getResult();
-            if (card!=null){
+            UserCard card = response.body().getResult();
+            if (card != null) {
 
-                //TODO 数据库的刷新,但是没有通知
-                User user=card.build();
-                user.save();
+
+                User user = card.build();
+                DbHelper.save(User.class,user);
 
 
                 return user;
@@ -176,9 +175,9 @@ public class UserHelper {
     /**
      * 搜索一个用户，优先本地缓存，然后再从网络拉取
      */
-    public static User search(String id){
-        User user=findFromLocal(id);
-        if (user==null){
+    public static User search(String id) {
+        User user = findFromLocal(id);
+        if (user == null) {
             return findFromNet(id);
         }
         return user;
@@ -187,9 +186,9 @@ public class UserHelper {
     /**
      * 搜索一个用户，优先从网络拉取
      */
-    public static User searchFirstOfNet(String id){
-        User user=findFromNet(id);
-        if (user==null){
+    public static User searchFirstOfNet(String id) {
+        User user = findFromNet(id);
+        if (user == null) {
             return findFromLocal(id);
         }
         return user;
