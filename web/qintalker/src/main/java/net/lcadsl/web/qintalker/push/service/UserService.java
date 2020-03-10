@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * 用户信息处理的Service
  *
- * @author qiujuer Email:qiujuer@live.cn
+ *
  * @version 1.0.0
  */
 // 127.0.0.1/api/user/...

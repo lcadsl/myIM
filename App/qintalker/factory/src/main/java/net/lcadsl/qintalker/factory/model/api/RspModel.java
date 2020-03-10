@@ -3,7 +3,7 @@ package net.lcadsl.qintalker.factory.model.api;
 import java.util.Date;
 
 /**
- * @author qiujuer Email:qiujuer@live.cn
+ *
  * @version 1.0.0
  */
 @SuppressWarnings({"WeakerAccess", "unused"})

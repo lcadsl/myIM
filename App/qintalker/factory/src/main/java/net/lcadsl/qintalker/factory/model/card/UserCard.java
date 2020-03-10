@@ -1,49 +1,34 @@
 package net.lcadsl.qintalker.factory.model.card;
 
-import com.google.gson.annotations.Expose;
-
 import net.lcadsl.qintalker.factory.model.Author;
 import net.lcadsl.qintalker.factory.model.db.User;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
+/**
+ * 用户卡片，用于接收服务器返回
+ *
+ * @version 1.0.0
+ */
 public class UserCard implements Author {
-
     private String id;
-
-
     private String name;
-
-
     private String phone;
-
-
     private String portrait;
-
-
     private String desc;
-
-
     private int sex = 0;
 
-
-    //用户关注人的数量
-
+    // 用户关注人的数量
     private int follows;
 
-    //粉丝数量
-
+    // 用户粉丝的数量
     private int following;
 
-    //我是否已经关注此人
-
+    // 我与当前User的关系状态，是否已经关注了这个人
     private boolean isFollow;
 
-    //用户信息最后的更新时间
-
+    // 用户信息最后的更新时间
     private Date modifyAt;
-
 
     public String getId() {
         return id;
@@ -125,7 +110,7 @@ public class UserCard implements Author {
         this.modifyAt = modifyAt;
     }
 
-    //缓存一个对应的User,不能被Gson解析使用
+    // 缓存一个对应的User, 不能被GSON框架解析使用ø
     private transient User user;
 
     public User build() {
