@@ -60,41 +60,35 @@ public class ContactPresenter extends BasePresenter<ContactContract.View>
                 .execute();
 
         //加载网络数据
-        UserHelper.refreshContacts(new DataSource.Callback<List<UserCard>>() {
+        UserHelper.refreshContacts();
+
+        /*
+        //转化为User
+        final List<User> users = new ArrayList<>();
+        for (UserCard userCard : userCards) {
+            users.add(userCard.build());
+        }
+
+        //在事务中保存数据库
+        DatabaseDefinition definition = FlowManager.getDatabase(AppDatabase.class);
+        definition.beginTransactionAsync(new ITransaction() {
             @Override
-            public void onDataNotAvailable(int strRes) {
-                //网络失败，因为本地有数据，不管错误
+            public void execute(DatabaseWrapper databaseWrapper) {
+
+
+                FlowManager.getModelAdapter(User.class)
+                        .saveAll(users);
+
+
             }
+        }).build().execute();
 
-            @Override
-            public void onDataLoaded(final List<UserCard> userCards) {
-                //转化为User
-                final List<User> users = new ArrayList<>();
-                for (UserCard userCard : userCards) {
-                    users.add(userCard.build());
-                }
-
-                //在事务中保存数据库
-                DatabaseDefinition definition = FlowManager.getDatabase(AppDatabase.class);
-                definition.beginTransactionAsync(new ITransaction() {
-                    @Override
-                    public void execute(DatabaseWrapper databaseWrapper) {
-
-
-                        FlowManager.getModelAdapter(User.class)
-                                .saveAll(users);
-
-
-                    }
-                }).build().execute();
-
-                //网络数据通常是新的，要直接刷新到界面
-                List<User> old=getView().getRecyclerAdapter().getItems();
-                //会导致数据顺序全都是新的数据集合
-                //getView().getRecyclerAdapter().replace(users);
-                diff(old, users);
-            }
-        });
+        //网络数据通常是新的，要直接刷新到界面
+        List<User> old=getView().getRecyclerAdapter().getItems();
+        //会导致数据顺序全都是新的数据集合
+        //getView().getRecyclerAdapter().replace(users);
+        diff(old, users);
+         */
 
         //TODO 问题：关注后存储了数据库但是没有刷新联系人
         //TODO 问题：只有全局刷新，不能单条刷新

@@ -5,6 +5,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import net.lcadsl.qintalker.factory.Factory;
 import net.lcadsl.qintalker.factory.R;
 import net.lcadsl.qintalker.factory.data.DataSource;
+import net.lcadsl.qintalker.factory.data.user.UserCenter;
 import net.lcadsl.qintalker.factory.model.api.RspModel;
 import net.lcadsl.qintalker.factory.model.api.account.AccountRspModel;
 import net.lcadsl.qintalker.factory.model.api.user.UserUpdateModel;
@@ -14,6 +15,7 @@ import net.lcadsl.qintalker.factory.model.db.User_Table;
 import net.lcadsl.qintalker.factory.net.Network;
 import net.lcadsl.qintalker.factory.net.RemoteService;
 import net.lcadsl.qintalker.factory.presenter.contact.FollowPresenter;
+import net.lcadsl.qintalker.utils.CollectionUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,10 +37,8 @@ public class UserHelper {
                 RspModel<UserCard> rspModel = response.body();
                 if (rspModel.success()) {
                     UserCard userCard = rspModel.getResult();
-                    //数据库的存储操作，需要把UserCard转换为User
-                    //保存用户信息
-                    User user = userCard.build();
-                    DbHelper.save(User.class, user);
+                    //唤起进行保存的操作
+                    Factory.getUserCenter().dispatch(userCard);
                     //返回成功
                     callback.onDataLoaded(userCard);
                 } else {
@@ -96,9 +96,8 @@ public class UserHelper {
                 RspModel<UserCard> rspModel = response.body();
                 if (rspModel.success()) {
                     UserCard userCard = rspModel.getResult();
-                    //保存到本地数据库,并通知联系人列表刷新
-                    User user = userCard.build();
-                    DbHelper.save(User.class,user);
+                    //唤起进行保存的操作
+                    Factory.getUserCenter().dispatch(userCard);
 
 
                     //返回数据
@@ -118,25 +117,38 @@ public class UserHelper {
     }
 
 
-    //刷新联系人的方法
-    public static void refreshContacts(final DataSource.Callback<List<UserCard>> callback) {
+    //刷新联系人的方法,不需要Callback，直接存储到数据库，
+    // 并通过数据库观察者进行通知界面更新
+    //界面更新的时候进行对比，差异更新
+    public static void refreshContacts() {
         RemoteService service = Network.remote();
         service.userContacts()
                 .enqueue(new Callback<RspModel<List<UserCard>>>() {
                     @Override
                     public void onResponse(Call<RspModel<List<UserCard>>> call, Response<RspModel<List<UserCard>>> response) {
                         RspModel<List<UserCard>> rspModel = response.body();
+
+
                         if (rspModel.success()) {
+                            //拿到集合
+                            List<UserCard> cards = rspModel.getResult();
+                            if (cards == null || cards.size() == 0)
+                                return;
+
+                            UserCard[] cards1 = cards.toArray(new UserCard[0]);
+                            //CollectionUtil.toArray(cards, UserCard.class);
+
+                            Factory.getUserCenter().dispatch(cards1);
                             //返回数据
-                            callback.onDataLoaded(rspModel.getResult());
+
                         } else {
-                            Factory.decodeRspCode(rspModel, callback);
+                            Factory.decodeRspCode(rspModel, null);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<RspModel<List<UserCard>>> call, Throwable t) {
-                        callback.onDataNotAvailable(R.string.data_network_error);
+                        //nothing
                     }
                 });
 
@@ -150,6 +162,7 @@ public class UserHelper {
                 .where(User_Table.id.eq(id))
                 .querySingle();
     }
+
     //从网络查询一个用户的信息
     public static User findFromNet(String id) {
         RemoteService remoteService = Network.remote();
@@ -160,7 +173,7 @@ public class UserHelper {
 
 
                 User user = card.build();
-                DbHelper.save(User.class,user);
+                Factory.getUserCenter().dispatch(card);
 
 
                 return user;
