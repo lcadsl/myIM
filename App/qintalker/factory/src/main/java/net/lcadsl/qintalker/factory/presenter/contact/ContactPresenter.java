@@ -19,6 +19,8 @@ import net.lcadsl.qintalker.factory.model.db.User;
 import net.lcadsl.qintalker.factory.model.db.User_Table;
 import net.lcadsl.qintalker.factory.persistence.Account;
 import net.lcadsl.qintalker.factory.presenter.BasePresenter;
+import net.lcadsl.qintalker.factory.presenter.user.ContactDataSource;
+import net.lcadsl.qintalker.factory.presenter.user.ContactRepository;
 import net.lcadsl.qintalker.factory.utils.DiffUiDataCallback;
 
 import java.util.ArrayList;
@@ -28,10 +30,13 @@ import java.util.List;
  * 联系人的Presenter实现
  */
 public class ContactPresenter extends BasePresenter<ContactContract.View>
-        implements ContactContract.Presenter {
+        implements ContactContract.Presenter,DataSource.SucceedCallback<List<User>> {
+
+    private ContactDataSource mSource;
 
     public ContactPresenter(ContactContract.View view) {
         super(view);
+        mSource=new ContactRepository();
     }
 
 
@@ -39,56 +44,13 @@ public class ContactPresenter extends BasePresenter<ContactContract.View>
     public void start() {
         super.start();
 
-        //加载本地数据库数据
+        //进行本地的数据加载，并添加监听
+        mSource.load(this);
 
-        SQLite.select()
-                .from(User.class)
-                .where(User_Table.isFollow.eq(true))
-                .and(User_Table.id.notEq(Account.getUserId()))
-                .orderBy(User_Table.name, true)
-                .limit(100)
-                .async()
-                .queryListResultCallback(new QueryTransaction.QueryResultListCallback<User>() {
-                    @Override
-                    public void onListQueryResult(QueryTransaction transaction, @NonNull List<User> tResult) {
-
-                        getView().getRecyclerAdapter().replace(tResult);
-                        getView().onAdapterDataChanged();
-
-                    }
-                })
-                .execute();
 
         //加载网络数据
         UserHelper.refreshContacts();
 
-        /*
-        //转化为User
-        final List<User> users = new ArrayList<>();
-        for (UserCard userCard : userCards) {
-            users.add(userCard.build());
-        }
-
-        //在事务中保存数据库
-        DatabaseDefinition definition = FlowManager.getDatabase(AppDatabase.class);
-        definition.beginTransactionAsync(new ITransaction() {
-            @Override
-            public void execute(DatabaseWrapper databaseWrapper) {
-
-
-                FlowManager.getModelAdapter(User.class)
-                        .saveAll(users);
-
-
-            }
-        }).build().execute();
-
-        //网络数据通常是新的，要直接刷新到界面
-        List<User> old=getView().getRecyclerAdapter().getItems();
-        //会导致数据顺序全都是新的数据集合
-        //getView().getRecyclerAdapter().replace(users);
-        diff(old, users);
-         */
 
         //TODO 问题：关注后存储了数据库但是没有刷新联系人
         //TODO 问题：只有全局刷新，不能单条刷新
@@ -105,5 +67,17 @@ public class ContactPresenter extends BasePresenter<ContactContract.View>
         //尝试刷新界面
         result.dispatchUpdatesTo(getView().getRecyclerAdapter());
         getView().onAdapterDataChanged();
+    }
+
+    @Override
+    public void onDataLoaded(List<User> users) {
+        //无论怎么操作，数据变更，最终都会通知到这里
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        //当界面销毁的时候，应该把数据监听进行销毁
+        mSource.dispose();
     }
 }
