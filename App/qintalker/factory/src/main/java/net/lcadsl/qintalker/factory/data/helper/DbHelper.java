@@ -296,7 +296,7 @@ public class DbHelper {
      * 通知监听器
      */
     @SuppressWarnings({"unused", "unchecked"})
-    public interface ChangedListener<Data> {
+    public interface ChangedListener<Data extends BaseModel> {
         void onDataSave(Data... list);
 
         void onDataDelete(Data... list);

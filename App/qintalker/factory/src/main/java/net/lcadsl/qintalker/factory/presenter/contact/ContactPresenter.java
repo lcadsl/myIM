@@ -21,6 +21,7 @@ import net.lcadsl.qintalker.factory.model.db.User_Table;
 import net.lcadsl.qintalker.factory.persistence.Account;
 import net.lcadsl.qintalker.factory.presenter.BasePresenter;
 import net.lcadsl.qintalker.factory.presenter.BaseRecyclerPresenter;
+import net.lcadsl.qintalker.factory.presenter.BaseSourcePresenter;
 import net.lcadsl.qintalker.factory.presenter.user.ContactDataSource;
 import net.lcadsl.qintalker.factory.presenter.user.ContactRepository;
 import net.lcadsl.qintalker.factory.utils.DiffUiDataCallback;
@@ -31,26 +32,22 @@ import java.util.List;
 /**
  * 联系人的Presenter实现
  *
- *
  * @version 1.0.0
  */
-public class ContactPresenter extends BaseRecyclerPresenter<User, ContactContract.View>
+public class ContactPresenter extends BaseSourcePresenter<User, User, ContactDataSource, ContactContract.View>
         implements ContactContract.Presenter, DataSource.SucceedCallback<List<User>> {
 
-    private ContactDataSource mSource;
 
     public ContactPresenter(ContactContract.View view) {
-        super(view);
-        mSource = new ContactRepository();
+        //初始化数据仓库
+        super(new ContactRepository(), view);
+
     }
 
 
     @Override
     public void start() {
         super.start();
-
-        // 进行本地的数据加载，并添加监听
-        mSource.load(this);
 
         // 加载网络数据
         UserHelper.refreshContacts();
@@ -76,10 +73,5 @@ public class ContactPresenter extends BaseRecyclerPresenter<User, ContactContrac
         refreshData(result, users);
     }
 
-    @Override
-    public void destroy() {
-        super.destroy();
-        // 当界面销毁的时候，我们应该把数据监听进行销毁
-        mSource.dispose();
-    }
+
 }

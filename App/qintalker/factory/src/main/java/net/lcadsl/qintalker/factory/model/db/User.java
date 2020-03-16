@@ -13,7 +13,7 @@ import java.util.Objects;
 
 
 @Table(database = AppDatabase.class)
-public class User extends BaseModel implements Author, DiffUiDataCallback.UiDataDiffer<User> {
+public class User extends BaseDbModel<User> implements Author {
     public static final int SEX_MAN = 1;
     public static final int SEX_WOMAN = 2;
 
@@ -141,19 +141,26 @@ public class User extends BaseModel implements Author, DiffUiDataCallback.UiData
 
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return sex == user.sex
+                && follows == user.follows
+                && following == user.following
+                && isFollow == user.isFollow
+                && Objects.equals(id, user.id)
+                && Objects.equals(name, user.name)
+                && Objects.equals(phone, user.phone)
+                && Objects.equals(portrait, user.portrait)
+                && Objects.equals(desc, user.desc)
+                && Objects.equals(alias, user.alias)
+                && Objects.equals(modifyAt, user.modifyAt);
+    }
+
+    @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (portrait != null ? portrait.hashCode() : 0);
-        result = 31 * result + (desc != null ? desc.hashCode() : 0);
-        result = 31 * result + sex;
-        result = 31 * result + (alias != null ? alias.hashCode() : 0);
-        result = 31 * result + follows;
-        result = 31 * result + following;
-        result = 31 * result + (isFollow ? 1 : 0);
-        result = 31 * result + (modifyAt != null ? modifyAt.hashCode() : 0);
-        return result;
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override

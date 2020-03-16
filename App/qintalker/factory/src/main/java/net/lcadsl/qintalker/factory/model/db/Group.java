@@ -16,11 +16,10 @@ import java.util.Objects;
 /**
  * 群信息Model
  *
- *
  * @version 1.0.0
  */
 @Table(database = AppDatabase.class)
-public class Group extends BaseModel implements Serializable, DiffUiDataCallback.UiDataDiffer<Group> {
+public class Group extends BaseDbModel<Group> implements Serializable {
     @PrimaryKey
     private String id; // 群Id
     @Column

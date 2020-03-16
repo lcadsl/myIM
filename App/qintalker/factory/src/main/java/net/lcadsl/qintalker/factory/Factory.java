@@ -1,9 +1,11 @@
 package net.lcadsl.qintalker.factory;
 
 import android.support.annotation.StringRes;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
@@ -15,15 +17,23 @@ import net.lcadsl.qintalker.factory.data.message.MessageCenter;
 import net.lcadsl.qintalker.factory.data.message.MessageDispatcher;
 import net.lcadsl.qintalker.factory.data.user.UserCenter;
 import net.lcadsl.qintalker.factory.data.user.UserDispatcher;
+import net.lcadsl.qintalker.factory.model.api.PushModel;
 import net.lcadsl.qintalker.factory.model.api.RspModel;
+import net.lcadsl.qintalker.factory.model.card.GroupCard;
+import net.lcadsl.qintalker.factory.model.card.GroupMemberCard;
+import net.lcadsl.qintalker.factory.model.card.MessageCard;
+import net.lcadsl.qintalker.factory.model.card.UserCard;
 import net.lcadsl.qintalker.factory.model.db.Message;
 import net.lcadsl.qintalker.factory.persistence.Account;
 import net.lcadsl.qintalker.factory.utils.DBFlowExclusionStrategy;
 
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class Factory {
+    private static final String TAG = Factory.class.getSimpleName();
     // 单例模式ø
     private static final Factory instance;
     // 全局的线程池
@@ -91,8 +101,7 @@ public class Factory {
 
 
     /**
-     * 进行错误Code的解析，
-     * 把网络返回的Code值进行统一的规划并返回为一个String资源
+     * 进行错误Code的解析， 把网络返回的Code值进行统一的规划并返回为一个String资源
      *
      * @param model    RspModel
      * @param callback DataSource.FailedCallback 用于返回一个错误的资源Id
@@ -173,36 +182,94 @@ public class Factory {
     /**
      * 处理推送来的消息
      *
-     * @param message 消息
+     * @param str 消息
      */
-    public static void dispatchPush(String message) {
-        // TODO
+    public static void dispatchPush(String str) {
+        //首先检查登陆状态
+        if (!Account.isLogin())
+            return;
+
+        PushModel model = PushModel.decode(str);
+        if (model == null)
+            return;
+
+        Log.e(TAG, model.toString());
+        //对推送集合进行遍历
+        for (PushModel.Entity entity : model.getEntities()) {
+            switch (entity.type) {
+                case PushModel.ENTITY_TYPE_LOGOUT:
+                    instance.logout();
+                    //退出的情况直接return
+                    return;
+
+                case PushModel.ENTITY_TYPE_MESSAGE: {
+                    //普通消息
+                    MessageCard card = getGson().fromJson(entity.content, MessageCard.class);
+                    getMessageCenter().dispatch(card);
+                    break;
+                }
+
+                case PushModel.ENTITY_TYPE_ADD_FRIEND: {
+                    //好友添加
+                    UserCard card = getGson().fromJson(entity.content, UserCard.class);
+                    getUserCenter().dispatch(card);
+                    break;
+                }
+
+                case PushModel.ENTITY_TYPE_ADD_GROUP: {
+                    //群添加
+                    GroupCard card = getGson().fromJson(entity.content, GroupCard.class);
+                    getGroupCenter().dispatch(card);
+                    break;
+                }
+
+                case PushModel.ENTITY_TYPE_ADD_GROUP_MEMBERS:
+                case PushModel.ENTITY_TYPE_MODIFY_GROUP_MEMBERS: {
+                    //群成员变更,回来的是群成员的列表
+                    Type type = new TypeToken<List<GroupMemberCard>>() {
+
+                    }.getType();
+
+                    List<GroupMemberCard> card = getGson().fromJson(entity.content, type);
+                    getGroupCenter().dispatch(card.toArray(new GroupMemberCard[0]));
+                    break;
+                }
+
+                case PushModel.ENTITY_TYPE_EXIT_GROUP_MEMBERS: {
+                    //TODO 成员退出的推送
+                }
+            }
+        }
+
     }
 
 
     /**
      * 获取一个用户中心的实现类
+     *
      * @return 用户中心的规范接口
      */
-    public static UserCenter getUserCenter(){
+    public static UserCenter getUserCenter() {
         return UserDispatcher.instance();
     }
 
 
     /**
      * 获取一个消息中心的实现类
+     *
      * @return 消息中心的规范接口
      */
-    public static MessageCenter getMessageCenter(){
+    public static MessageCenter getMessageCenter() {
         return MessageDispatcher.instance();
     }
 
 
     /**
      * 获取一个群中心的实现类
+     *
      * @return 群中心的规范接口
      */
-    public static GroupCenter getGroupCenter(){
+    public static GroupCenter getGroupCenter() {
         return GroupDispatcher.instance();
     }
 
