@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * 推送消息的基础Model
  *
- *
  * @version 1.0.0
  */
 @SuppressWarnings("WeakerAccess")
@@ -48,8 +47,7 @@ public class PushModel {
     }
 
     /**
-     * 把一个Json字符串，转化为一个实体数组
-     * 并把数组封装到PushModel中，方便后面的数据流处理
+     * 把一个Json字符串，转化为一个实体数组 并把数组封装到PushModel中，方便后面的数据流处理
      *
      * @param json Json数据
      * @return
@@ -80,12 +78,17 @@ public class PushModel {
         public String content;
         // 消息生成时间
         public Date createAt;
+
+
+        @Override
+        public String toString() {
+            return "Entity{" +
+                    "type=" + type +
+                    ", content='" + content + '\'' +
+                    ", createAt=" + createAt +
+                    '}';
+        }
     }
 
-    @Override
-    public String toString() {
-        return "PushModel{" +
-                "entities=" + entities +
-                '}';
-    }
+
 }
