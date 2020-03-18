@@ -1,13 +1,11 @@
 package net.lcadsl.web.qintalker.push.service;
 
 import com.google.common.base.Strings;
-import net.lcadsl.web.qintalker.push.bean.api.base.PushModel;
 import net.lcadsl.web.qintalker.push.bean.api.base.ResponseModel;
 import net.lcadsl.web.qintalker.push.bean.api.user.UpdateInfoModel;
 import net.lcadsl.web.qintalker.push.bean.card.UserCard;
 import net.lcadsl.web.qintalker.push.bean.db.User;
 import net.lcadsl.web.qintalker.push.factory.UserFactory;
-import net.lcadsl.web.qintalker.push.utils.PushDispatcher;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -53,13 +51,7 @@ public class UserService extends BaseService {
     public ResponseModel<List<UserCard>> contact() {
         User self = getSelf();
 
-        PushModel model=new PushModel();
-        model.add(new PushModel.Entity(0,"Hello!!!"));
 
-
-        PushDispatcher dispatcher=new PushDispatcher();
-        dispatcher.add(self,model);
-        dispatcher.submit();
 
         // 拿到我的联系人
         List<User> users = UserFactory.contacts(self);
