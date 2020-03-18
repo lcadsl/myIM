@@ -10,7 +10,9 @@
   <head>
     <title>$Title$</title>
   </head>
-  <body>
-  $END$
+  <body style="text-align: center">
+  <h1>
+    轻聊API接口地址
+  </h1>
   </body>
 </html>

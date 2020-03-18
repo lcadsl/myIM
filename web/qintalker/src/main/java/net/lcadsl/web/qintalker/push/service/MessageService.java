@@ -3,8 +3,10 @@ package net.lcadsl.web.qintalker.push.service;
 import net.lcadsl.web.qintalker.push.bean.api.base.ResponseModel;
 import net.lcadsl.web.qintalker.push.bean.api.message.MessageCreateModel;
 import net.lcadsl.web.qintalker.push.bean.card.MessageCard;
+import net.lcadsl.web.qintalker.push.bean.db.Group;
 import net.lcadsl.web.qintalker.push.bean.db.Message;
 import net.lcadsl.web.qintalker.push.bean.db.User;
+import net.lcadsl.web.qintalker.push.factory.GroupFactory;
 import net.lcadsl.web.qintalker.push.factory.MessageFactory;
 import net.lcadsl.web.qintalker.push.factory.PushFactory;
 import net.lcadsl.web.qintalker.push.factory.UserFactory;
@@ -66,8 +68,16 @@ public class MessageService extends BaseService {
 
     //发送到群
     private ResponseModel<MessageCard> pushToGroup(User sender, MessageCreateModel model) {
-        //TODO  Group group =GroupFactory.findById();
-        return null;
+        //找群是有权限的，你要在群里
+        Group group = GroupFactory.findById(sender,model.getReceiverId());
+        if (group==null){
+            //没有找到群
+            return ResponseModel.buildNotFoundUserError("con't find receiver group");
+        }
+        //添加到数据库
+        Message message=MessageFactory.add(sender,group,model);
+        //走通用的推送逻辑
+        return buildAndPushResponse(sender,message);
     }
 
     //推送并构建一个返回信息
