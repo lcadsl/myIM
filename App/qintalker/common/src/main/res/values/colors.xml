@@ -18,7 +18,7 @@
     <color name="textDark">#202020</color>
 <!--提示色-->
     <color name="alertNormal">#4ce275</color>
-    <color name="alertImportant">#f98d2c</color>
+    <color name="alertImportant">#F92C44</color>
 <!--遮罩色-->
     <color name="maskChatHeader">@color/black_alpha_48</color>
     <color name="navIconTintLight">@color/white_alpha_240</color>

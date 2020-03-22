@@ -14,6 +14,6 @@
         android:contentDescription="@string/app_name"
         android:foreground="@color/black_alpha_16"
         android:scaleType="centerInside"
-        android:src="@color/white" />
+        android:src="@color/grey_50" />
 
 </FrameLayout>
