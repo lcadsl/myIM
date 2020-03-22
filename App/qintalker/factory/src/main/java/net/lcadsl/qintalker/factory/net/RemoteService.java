@@ -5,7 +5,9 @@ import net.lcadsl.qintalker.factory.model.api.RspModel;
 import net.lcadsl.qintalker.factory.model.api.account.AccountRspModel;
 import net.lcadsl.qintalker.factory.model.api.account.LoginModel;
 import net.lcadsl.qintalker.factory.model.api.account.RegisterModel;
+import net.lcadsl.qintalker.factory.model.api.message.MsgCreateModel;
 import net.lcadsl.qintalker.factory.model.api.user.UserUpdateModel;
+import net.lcadsl.qintalker.factory.model.card.MessageCard;
 import net.lcadsl.qintalker.factory.model.card.UserCard;
 
 import java.util.List;
@@ -66,9 +68,13 @@ public interface RemoteService {
     @GET("user/contact")
     Call<RspModel<List<UserCard>>> userContacts();
 
-    //获取联系人列表
+    //查询某人的信息
     @GET("user/{userId}")
     Call<RspModel<UserCard>> userFind(@Path("userId") String userId);
+
+    //发送消息
+    @POST("msg")
+    Call<RspModel<MessageCard>> msgPush(@Body MsgCreateModel model);
 
 
 }

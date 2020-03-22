@@ -7,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.lcadsl.qintalker.factory.model.db.Group;
+import net.lcadsl.qintalker.factory.presenter.message.ChatContract;
 import net.lcadsl.qintalker.push.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * 群聊天界面实现
  */
-public class ChatGroupFragment extends ChatFragment {
+public class ChatGroupFragment extends ChatFragment<Group>
+implements ChatContract.GroupView {
 
 
     public ChatGroupFragment() {
@@ -27,4 +30,13 @@ public class ChatGroupFragment extends ChatFragment {
         return R.layout.fragment_chat_group;
     }
 
+    @Override
+    protected ChatContract.Presenter initPresenter() {
+        return null;
+    }
+
+    @Override
+    public void onInit(Group group) {
+
+    }
 }

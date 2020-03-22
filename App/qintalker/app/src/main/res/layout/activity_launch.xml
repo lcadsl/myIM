@@ -38,7 +38,7 @@
         android:layout_marginBottom="@dimen/len_16"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:gravity="center_horizontal|bottom"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

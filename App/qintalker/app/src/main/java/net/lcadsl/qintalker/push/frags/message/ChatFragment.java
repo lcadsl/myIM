@@ -3,6 +3,7 @@ package net.lcadsl.qintalker.push.frags.message;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,12 +17,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import net.lcadsl.qintalker.common.app.Fragment;
+import net.lcadsl.qintalker.common.app.PresenterFragment;
 import net.lcadsl.qintalker.common.widget.PortraitView;
 import net.lcadsl.qintalker.common.widget.adapter.TextWatcherAdapter;
 import net.lcadsl.qintalker.common.widget.recycler.RecyclerAdapter;
 import net.lcadsl.qintalker.factory.model.db.Message;
 import net.lcadsl.qintalker.factory.model.db.User;
 import net.lcadsl.qintalker.factory.persistence.Account;
+import net.lcadsl.qintalker.factory.presenter.message.ChatContract;
 import net.lcadsl.qintalker.push.R;
 import net.lcadsl.qintalker.push.activities.MessageActivity;
 import net.qiujuer.genius.ui.compat.UiCompat;
@@ -32,8 +35,9 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public abstract class ChatFragment extends Fragment
-        implements AppBarLayout.OnOffsetChangedListener {
+public abstract class ChatFragment<InitModel>
+        extends PresenterFragment<ChatContract.Presenter>
+        implements AppBarLayout.OnOffsetChangedListener, ChatContract.View<InitModel> {
     protected String mReceiverId;
     protected Adapter mAdapter;
 
@@ -45,6 +49,9 @@ public abstract class ChatFragment extends Fragment
 
     @BindView(R.id.appbar)
     AppBarLayout mAppBarLayout;
+
+    @BindView(R.id.collapsingToolbarLayout)
+    CollapsingToolbarLayout mCollapsingLayout;
 
 
     @BindView(R.id.edit_content)
@@ -72,6 +79,14 @@ public abstract class ChatFragment extends Fragment
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new Adapter();
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+
+    @Override
+    protected void initData() {
+        super.initData();
+        //开始进行初始化操作
+        mPresenter.start();
     }
 
     //初始化toolbar
@@ -125,6 +140,11 @@ public abstract class ChatFragment extends Fragment
     void onSubmitClick() {
         if (mSubmit.isActivated()) {
             //发送
+            String content=mContent.getText().toString();
+            mContent.setText("");
+
+            mPresenter.pushText(content);
+
         } else {
             onMoreClick();
         }
@@ -135,6 +155,16 @@ public abstract class ChatFragment extends Fragment
         //TODO
     }
 
+
+    @Override
+    public RecyclerAdapter<Message> getRecyclerAdapter() {
+        return mAdapter;
+    }
+
+    @Override
+    public void onAdapterDataChanged() {
+        //界面没有占位布局，Recycler是一直显示的
+    }
 
     //内容的适配器
     private class Adapter extends RecyclerAdapter<Message> {
@@ -242,9 +272,9 @@ public abstract class ChatFragment extends Fragment
         @OnClick(R.id.im_portrait)
         void onRePushClick() {
             //发送失败后点击头像重新发送
-            if (mLoading != null) {
-                //必须是右边的才能重新发送
-                //TODO 重新发送
+            if (mLoading != null&&mPresenter.rePush(mData)) {
+                //状态改变
+                updateData(mData);
             }
         }
     }
@@ -277,7 +307,6 @@ public abstract class ChatFragment extends Fragment
     class AudioHolder extends BaseHolder {
 
 
-
         public AudioHolder(View itemView) {
             super(itemView);
         }
@@ -291,12 +320,10 @@ public abstract class ChatFragment extends Fragment
     }
 
 
-
     /**
      * 图片的Holder
      */
     class PicHolder extends BaseHolder {
-
 
 
         public PicHolder(View itemView) {
