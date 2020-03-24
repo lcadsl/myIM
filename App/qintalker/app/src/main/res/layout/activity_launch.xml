@@ -7,27 +7,38 @@
     android:background="@color/colorPrimary"
     android:id="@+id/activity_launch"
     android:orientation="vertical"
-    tools:context="net.lcadsl.qintalker.push.LaunchActivity">
+    tools:context="net.lcadsl.qintalker.push.LaunchActivity"
+    tools:background="@color/white">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1">
+        android:layout_weight="2">
 
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="wrap_content"
-            android:layout_height="81dp"
+            android:layout_height="150dp"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="20dp"
-            android:contentDescription="@string/app_name"
 
-            android:src="@drawable/ic_launch_logo2"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="100dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/len_60"
+            android:text="@string/app_name"
+            android:gravity="center"
+            android:textColor="#303C42"
+            android:textSize="30dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
     </android.support.constraint.ConstraintLayout>
 
 
@@ -60,7 +71,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/len_16"
             android:gravity="center"
-            android:text="1.0.0"
+            android:text="Design by lcadsl"
             android:textColor="@color/white_alpha_192" />
     </LinearLayout>
 </LinearLayout>
