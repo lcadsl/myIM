@@ -14,6 +14,8 @@ import net.lcadsl.qintalker.common.app.Activity;
 import net.lcadsl.qintalker.common.app.Fragment;
 import net.lcadsl.qintalker.factory.model.Author;
 import net.lcadsl.qintalker.factory.model.db.Group;
+import net.lcadsl.qintalker.factory.model.db.Message;
+import net.lcadsl.qintalker.factory.model.db.Session;
 import net.lcadsl.qintalker.push.R;
 import net.lcadsl.qintalker.push.frags.message.ChatGroupFragment;
 import net.lcadsl.qintalker.push.frags.message.ChatUserFragment;
@@ -25,6 +27,24 @@ public class MessageActivity extends Activity {
 
     private String mReceiverId;
     private boolean mIsGroup;
+
+
+    /**
+     * 通过Session发起聊天
+     *
+     * @param context
+     * @param session
+     */
+    public static void show(Context context, Session session) {
+        if (session == null || context == null || TextUtils.isEmpty(session.getId()))
+            return;
+        Intent intent = new Intent(context, MessageActivity.class);
+        intent.putExtra(KET_RECEIVER_ID, session.getId());
+        intent.putExtra(KET_RECEIVER_IS_GROUP, session.getReceiverType() == Message.RECEIVER_TYPE_GROUP);
+
+
+        context.startActivity(intent);
+    }
 
     /**
      * 显示人的聊天界面
@@ -86,12 +106,12 @@ public class MessageActivity extends Activity {
             fragment = new ChatUserFragment();
 
         //从activity传递参数到Fragment中
-        Bundle bundle=new Bundle();
-        bundle.putString(KET_RECEIVER_ID,mReceiverId);
+        Bundle bundle = new Bundle();
+        bundle.putString(KET_RECEIVER_ID, mReceiverId);
         fragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.lay_container,fragment)
+                .add(R.id.lay_container, fragment)
                 .commit();
     }
 }

@@ -1,11 +1,16 @@
 package net.lcadsl.qintalker.factory.model.db;
 
+import android.text.TextUtils;
+
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import net.lcadsl.qintalker.factory.data.helper.GroupHelper;
+import net.lcadsl.qintalker.factory.data.helper.MessageHelper;
+import net.lcadsl.qintalker.factory.data.helper.UserHelper;
 import net.lcadsl.qintalker.factory.utils.DiffUiDataCallback;
 
 import java.util.Date;
@@ -14,7 +19,6 @@ import java.util.Objects;
 
 /**
  * 本地的会话表
- *
  *
  * @version 1.0.0
  */
@@ -186,17 +190,77 @@ public class Session extends BaseDbModel<Session> {
     }
 
     public void refreshToNow() {
-        //TODO 刷新会话信息为最新状态
+        Message message;
+        if (receiverType == Message.RECEIVER_TYPE_GROUP) {
+            //刷新当前对应的群的信息
+            message = MessageHelper.findLastWithGroup(id);
+            if (message == null) {
+                if (TextUtils.isEmpty(picture)
+                        || TextUtils.isEmpty(this.title)) {
+                    //查询群
+                    Group group = GroupHelper.findFromLocal(id);
+                    if (group != null) {
+                        this.picture = group.getPicture();
+                        this.title = group.getName();
+                    }
+                }
+                this.message = null;
+                this.content = "";
+                this.modifyAt = new Date(System.currentTimeMillis());
+            } else {
+                if (TextUtils.isEmpty(picture)
+                        || TextUtils.isEmpty(this.title)) {
+
+                    Group group = message.getGroup();
+                    group.load();
+
+                    this.picture = group.getPicture();
+                    this.title = group.getName();
+
+                }
+                this.message = message;
+                this.content = message.getSampleContent();
+                this.modifyAt = message.getCreateAt();
+            }
+        }else {
+            //和人
+            message=MessageHelper.findLastWithUser(id);
+            if (message==null){
+                if (TextUtils.isEmpty(picture)
+                        || TextUtils.isEmpty(this.title)) {
+                    //查询人
+                    User user = UserHelper.findFromLocal(id);
+                    if (user != null) {
+                        this.picture = user.getPortrait();
+                        this.title = user.getName();
+                    }
+                }
+                this.message = null;
+                this.content = "";
+                this.modifyAt = new Date(System.currentTimeMillis());
+            }else {
+                if (TextUtils.isEmpty(picture)
+                        || TextUtils.isEmpty(this.title)) {
+                    //查询人
+                    User other = message.getOther();
+                    other.load();
+
+                        this.picture = other.getPortrait();
+                        this.title = other.getName();
+
+                }
+                this.message = message;
+                this.content = message.getSampleContent();
+                this.modifyAt = message.getCreateAt();
+
+            }
+        }
     }
 
 
     /**
-     * 对于会话信息，最重要的部分进行提取
-     * 其中我们主要关注两个点：
-     * 一个会话最重要的是标示是和人聊天还是在群聊天；
-     * 所以对于这点：Id存储的是人或者群的Id
-     * 紧跟着Type：存储的是具体的类型（人、群）
-     * equals 和 hashCode 也是对两个字段进行判断
+     * 对于会话信息，最重要的部分进行提取 其中我们主要关注两个点： 一个会话最重要的是标示是和人聊天还是在群聊天； 所以对于这点：Id存储的是人或者群的Id
+     * 紧跟着Type：存储的是具体的类型（人、群） equals 和 hashCode 也是对两个字段进行判断
      */
     public static class Identify {
         public String id;

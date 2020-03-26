@@ -25,7 +25,7 @@ public abstract class BaseDbRepository<Data extends BaseDbModel<Data>> implement
     //和Presenter交互的回调
     private SucceedCallback<List<Data>> callback;
     //当前缓存的数据
-    private final List<Data> dataList = new LinkedList<>();
+    protected final LinkedList<Data> dataList = new LinkedList<>();
     //当前泛型对应的真实的class信息
     private Class<Data> dataClass;
 
