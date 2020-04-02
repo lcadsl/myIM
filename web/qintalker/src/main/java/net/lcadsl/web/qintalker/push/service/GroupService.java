@@ -1,5 +1,6 @@
 package net.lcadsl.web.qintalker.push.service;
 
+import com.google.common.base.Strings;
 import net.lcadsl.web.qintalker.push.bean.api.base.ResponseModel;
 import net.lcadsl.web.qintalker.push.bean.api.group.GroupCreateModel;
 import net.lcadsl.web.qintalker.push.bean.api.group.GroupMemberAddModel;
@@ -7,23 +8,91 @@ import net.lcadsl.web.qintalker.push.bean.api.group.GroupMemberUpdateModel;
 import net.lcadsl.web.qintalker.push.bean.card.ApplyCard;
 import net.lcadsl.web.qintalker.push.bean.card.GroupCard;
 import net.lcadsl.web.qintalker.push.bean.card.GroupMemberCard;
+import net.lcadsl.web.qintalker.push.bean.db.Group;
+import net.lcadsl.web.qintalker.push.bean.db.GroupMember;
+import net.lcadsl.web.qintalker.push.bean.db.User;
+import net.lcadsl.web.qintalker.push.factory.GroupFactory;
+import net.lcadsl.web.qintalker.push.factory.PushFactory;
+import net.lcadsl.web.qintalker.push.factory.UserFactory;
+import net.lcadsl.web.qintalker.push.provider.LocalDateTimeConverter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 群组接口的入口
  */
 
 @Path("/group")
-public class GroupService extends BaseService{
+public class GroupService extends BaseService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseModel<GroupCard> create(GroupCreateModel model){
-        return null;
+    public ResponseModel<GroupCard> create(GroupCreateModel model) {
+        if (GroupCreateModel.check(model)) {
+            return ResponseModel.buildParameterError();
+        }
+        //创建者
+        User creator = getSelf();
+        //保证创建者不在列表中
+        model.getUsers().remove(creator.getId());
+        if (model.getUsers().size() == 0) {
+            return ResponseModel.buildParameterError();
+        }
+
+        //检查是否已有
+        if (GroupFactory.findByName(model.getName()) != null) {
+            return ResponseModel.buildHaveNameError();
+        }
+
+        List<User> users = new ArrayList<>();
+        for (String s : model.getUsers()) {
+            User user = UserFactory.findById(s);
+            if (user == null)
+                continue;
+            users.add(user);
+        }
+        //一个成员都没有
+        if (users.size() == 0) {
+            return ResponseModel.buildParameterError();
+        }
+
+        Group group = GroupFactory.create(creator, model, users);
+        if (group == null) {
+            //服务器异常
+            return ResponseModel.buildServiceError();
+        }
+
+        //拿管理员信息
+        GroupMember creatorMember = GroupFactory.getMember(creator.getId(), group.getId());
+        if (creatorMember == null) {
+            //服务器异常
+            return ResponseModel.buildServiceError();
+        }
+        //拿到群成员，给所有群成员发送信息，告知已经被添加到群
+        Set<GroupMember> members = GroupFactory.getMembers(group);
+        if (members == null) {
+            //服务器异常
+            return ResponseModel.buildServiceError();
+        }
+
+
+        members = members.stream()
+                .filter(groupMember -> {
+                    return !groupMember.getId().equalsIgnoreCase(creatorMember.getId());
+                })
+                .collect(Collectors.toSet());
+
+        //开始发起推送
+        PushFactory.pushGroupAdd(members);
+
+        return ResponseModel.buildOk(new GroupCard(creatorMember));
     }
 
 
@@ -31,8 +100,20 @@ public class GroupService extends BaseService{
     @Path("/search/{name:(.*)?}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseModel<List<GroupCard>> search(@PathParam("name") @DefaultValue("") String name){
-        return null;
+    public ResponseModel<List<GroupCard>> search(@PathParam("name") @DefaultValue("") String name) {
+        User self = getSelf();
+        List<Group> groups = GroupFactory.search(name);
+        if (groups != null && groups.size() > 0) {
+            List<GroupCard> groupCards = groups.stream()
+                    .map(group -> {
+                        GroupMember member = GroupFactory.getMember(self.getId(), group.getId());
+
+                        return new GroupCard(group, member);
+                    }).collect(Collectors.toList());
+
+            return ResponseModel.buildOk(groupCards);
+        }
+        return ResponseModel.buildOk();
     }
 
 
@@ -40,8 +121,31 @@ public class GroupService extends BaseService{
     @Path("/list/{date:(.*)?}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseModel<List<GroupCard>> list(@DefaultValue("") @PathParam("date") String dateStr){
-        return null;
+    public ResponseModel<List<GroupCard>> list(@DefaultValue("") @PathParam("date") String dateStr) {
+        User self = getSelf();
+
+        //拿时间
+        LocalDateTime dateTime = null;
+        if (!Strings.isNullOrEmpty(dateStr)) {
+            try {
+                dateTime = LocalDateTime.parse(dateStr, LocalDateTimeConverter.FORMATTER);
+            } catch (Exception e) {
+                dateTime = null;
+            }
+        }
+
+        Set<GroupMember> members = GroupFactory.getMembers(self);
+        if (members == null || members.size() == 0)
+            return ResponseModel.buildOk();
+
+        final LocalDateTime finalDateTime = dateTime;
+        List<GroupCard> groupCards = members.stream()
+                .filter(groupMember -> finalDateTime == null ||
+                        groupMember.getUpdateAt().isAfter(finalDateTime))
+                .map(GroupCard::new)
+                .collect(Collectors.toList());
+
+        return ResponseModel.buildOk(groupCards);
     }
 
 
@@ -49,8 +153,16 @@ public class GroupService extends BaseService{
     @Path("/{groupId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseModel<GroupCard> getGroup(@PathParam("groupId") String id){
-        return null;
+    public ResponseModel<GroupCard> getGroup(@PathParam("groupId") String id) {
+        if (Strings.isNullOrEmpty(id))
+            return ResponseModel.buildParameterError();
+        
+        User self=getSelf();
+        GroupMember member=GroupFactory.getMember(self.getId(),id);
+        if (member==null)
+            return ResponseModel.buildNotFoundGroupError(null);
+
+        return ResponseModel.buildOk(new GroupCard(member));
     }
 
 
@@ -58,7 +170,7 @@ public class GroupService extends BaseService{
     @Path("/{groupId}/member")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseModel<List<GroupMemberCard>> members(@PathParam("groupId") String groupId){
+    public ResponseModel<List<GroupMemberCard>> members(@PathParam("groupId") String groupId) {
         return null;
     }
 
@@ -67,7 +179,7 @@ public class GroupService extends BaseService{
     @Path("/{groupId}/member")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseModel<List<GroupMemberCard>> memberAdd(@PathParam("groupId") String groupId, GroupMemberAddModel model){
+    public ResponseModel<List<GroupMemberCard>> memberAdd(@PathParam("groupId") String groupId, GroupMemberAddModel model) {
         return null;
     }
 
@@ -76,7 +188,7 @@ public class GroupService extends BaseService{
     @Path("/member/{memberId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseModel<GroupMemberCard> modifyMember(@PathParam("memberId") String memberId, GroupMemberUpdateModel model){
+    public ResponseModel<GroupMemberCard> modifyMember(@PathParam("memberId") String memberId, GroupMemberUpdateModel model) {
         return null;
     }
 
@@ -85,7 +197,7 @@ public class GroupService extends BaseService{
     @Path("/applyJoin/{groupId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseModel<ApplyCard> join(@PathParam("groupId") String groupId){
+    public ResponseModel<ApplyCard> join(@PathParam("groupId") String groupId) {
         return null;
     }
 }
