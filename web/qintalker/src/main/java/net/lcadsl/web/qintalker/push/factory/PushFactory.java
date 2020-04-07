@@ -2,6 +2,7 @@ package net.lcadsl.web.qintalker.push.factory;
 
 import com.google.common.base.Strings;
 import net.lcadsl.web.qintalker.push.bean.api.base.PushModel;
+import net.lcadsl.web.qintalker.push.bean.card.GroupMemberCard;
 import net.lcadsl.web.qintalker.push.bean.card.MessageCard;
 import net.lcadsl.web.qintalker.push.bean.db.*;
 import net.lcadsl.web.qintalker.push.utils.Hib;
@@ -132,7 +133,12 @@ public class PushFactory {
 
     }
 
-    public static void pushGroupAdd(Set<GroupMember> members) {
+    public static void pushJoinGroup(Set<GroupMember> members) {
         //TODO 给群成员发送已经被添加
+    }
+
+    //通知老成员有新人加入
+    public static void pushGroupMemberAdd(Set<GroupMember> oldMembers, List<GroupMemberCard> insertCards) {
+
     }
 }
