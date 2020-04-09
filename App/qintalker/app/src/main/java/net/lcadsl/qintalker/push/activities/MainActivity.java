@@ -150,7 +150,8 @@ public class MainActivity extends Activity
         //如果是群则打开群创建界面
 
         if (Objects.equals(mNavHelper.getCurrentTab().extra, R.string.title_group)) {
-            //TODO 打开群创建界面
+            // 打开群创建界面
+            GroupCreateActivity.show(this);
         } else {
             //如果是其他则打开添加用户界面
             SearchActivity.show(this, SearchActivity.TYPE_USER);
