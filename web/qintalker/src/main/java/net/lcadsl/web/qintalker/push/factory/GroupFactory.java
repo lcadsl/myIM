@@ -68,7 +68,7 @@ public class GroupFactory {
             session.save(group);
 
             GroupMember ownerMember = new GroupMember(creator, group);
-            //给管理员设置最高权限
+            //给创建者设置最高权限
             ownerMember.setPermissionType(GroupMember.PERMISSION_TYPE_ADMIN_SU);
             session.save(ownerMember);
 
@@ -124,6 +124,13 @@ public class GroupFactory {
                 session.save(member);
                 members.add(member);
             }
+            //进行数据刷新
+            /*
+            for (GroupMember member : members) {
+                session.refresh(member);
+            }
+             */
+
             return members;
         });
     }

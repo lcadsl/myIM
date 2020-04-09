@@ -35,7 +35,7 @@ public class GroupService extends BaseService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseModel<GroupCard> create(GroupCreateModel model) {
-        if (GroupCreateModel.check(model)) {
+        if (!GroupCreateModel.check(model)) {
             return ResponseModel.buildParameterError();
         }
         //创建者

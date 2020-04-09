@@ -5,6 +5,7 @@ import net.lcadsl.web.qintalker.push.bean.api.base.ResponseModel;
 import net.lcadsl.web.qintalker.push.bean.api.user.UpdateInfoModel;
 import net.lcadsl.web.qintalker.push.bean.card.UserCard;
 import net.lcadsl.web.qintalker.push.bean.db.User;
+import net.lcadsl.web.qintalker.push.factory.PushFactory;
 import net.lcadsl.web.qintalker.push.factory.UserFactory;
 
 import javax.ws.rs.*;
@@ -95,7 +96,9 @@ public class UserService extends BaseService {
             return ResponseModel.buildServiceError();
         }
 
-        // TODO 通知我关注的人我关注他
+        //通知我关注的人我关注他
+        //给他发送一个我的信息
+        PushFactory.pushFollow(followUser,new UserCard(self));
 
         // 返回关注的人的信息
         return ResponseModel.buildOk(new UserCard(followUser, true));
