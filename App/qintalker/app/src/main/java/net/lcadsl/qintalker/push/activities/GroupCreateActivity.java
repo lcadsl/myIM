@@ -185,7 +185,10 @@ implements GroupCreateContract.View{
 
     @Override
     public void onCreateSucceed() {
-
+        // 提示成功
+        hideLoading();
+        Application.showToast(R.string.label_group_create_succeed);
+        finish();
     }
 
 
@@ -203,7 +206,7 @@ implements GroupCreateContract.View{
 
     @Override
     public void onAdapterDataChanged() {
-
+        hideLoading();
     }
 
 
