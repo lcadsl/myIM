@@ -12,8 +12,10 @@ import net.lcadsl.qintalker.factory.model.api.user.UserUpdateModel;
 import net.lcadsl.qintalker.factory.model.card.UserCard;
 import net.lcadsl.qintalker.factory.model.db.User;
 import net.lcadsl.qintalker.factory.model.db.User_Table;
+import net.lcadsl.qintalker.factory.model.db.view.UserSampleModel;
 import net.lcadsl.qintalker.factory.net.Network;
 import net.lcadsl.qintalker.factory.net.RemoteService;
+import net.lcadsl.qintalker.factory.persistence.Account;
 import net.lcadsl.qintalker.factory.presenter.contact.FollowPresenter;
 import net.lcadsl.qintalker.utils.CollectionUtil;
 
@@ -205,5 +207,27 @@ public class UserHelper {
             return findFromLocal(id);
         }
         return user;
+    }
+
+    public static List<User> getContact() {
+        return SQLite.select()
+                .from(User.class)
+                .where(User_Table.isFollow.eq(true))
+                .and(User_Table.id.notEq(Account.getUserId()))
+                .orderBy(User_Table.name, true)
+                .limit(100)
+                .queryList();
+    }
+
+    //获取联系人列表，简单数据的
+    public static List<UserSampleModel> getSampleContact() {
+        return SQLite.select(User_Table.id.withTable().as("id"),
+                User_Table.name.withTable().as("name"),
+                User_Table.portrait.withTable().as("portrait"))
+                .from(User.class)
+                .where(User_Table.isFollow.eq(true))
+                .and(User_Table.id.notEq(Account.getUserId()))
+                .orderBy(User_Table.name, true)
+                .queryCustomList(UserSampleModel.class);
     }
 }

@@ -20,7 +20,7 @@ public interface GroupCreateContract {
     }
 
      class ViewModel{
-        Author author;
-        boolean isSelected;
+        public Author author;
+        public boolean isSelected;
      }
 }
