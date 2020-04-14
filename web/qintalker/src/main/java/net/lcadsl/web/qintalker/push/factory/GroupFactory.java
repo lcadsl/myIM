@@ -73,7 +73,7 @@ public class GroupFactory {
             session.save(ownerMember);
 
             for (User user : users) {
-                GroupMember member = new GroupMember(creator, group);
+                GroupMember member = new GroupMember(user, group);
                 session.save(member);
             }
 

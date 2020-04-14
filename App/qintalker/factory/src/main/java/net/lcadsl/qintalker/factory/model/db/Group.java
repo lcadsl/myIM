@@ -45,7 +45,6 @@ public class Group extends BaseDbModel<Group> implements Serializable {
     public Object holder; // 预留字段，用于界面显示
 
 
-
     public String getId() {
         return id;
     }
@@ -161,10 +160,11 @@ public class Group extends BaseDbModel<Group> implements Serializable {
     }
 
     private List<MemberUserModel> groupLatelyMembers;
+
     public List<MemberUserModel> getLatelyGroupMembers() {
-        if (groupLatelyMembers==null||groupLatelyMembers.isEmpty()){
+        if (groupLatelyMembers == null || groupLatelyMembers.isEmpty()) {
             //加载简单的用户信息,最多四条
-            groupLatelyMembers=GroupHelper.getMemberUsers(id,4);
+            groupLatelyMembers = GroupHelper.getMemberUsers(id, 4);
         }
         return groupLatelyMembers;
     }
