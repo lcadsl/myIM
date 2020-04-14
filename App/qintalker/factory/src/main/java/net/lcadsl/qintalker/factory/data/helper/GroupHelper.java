@@ -14,6 +14,8 @@ import net.lcadsl.qintalker.factory.model.db.User;
 import net.lcadsl.qintalker.factory.net.Network;
 import net.lcadsl.qintalker.factory.net.RemoteService;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,5 +85,32 @@ public class GroupHelper {
                         callback.onDataNotAvailable(R.string.data_network_error);
                     }
                 });
+    }
+
+    // 搜索的方法
+    public static Call search(String name, final DataSource.Callback<List<GroupCard>> callback) {
+        RemoteService service = Network.remote();
+        Call<RspModel<List<GroupCard>>> call = service.groupSearch(name);
+
+        call.enqueue(new Callback<RspModel<List<GroupCard>>>() {
+            @Override
+            public void onResponse(Call<RspModel<List<GroupCard>>> call, Response<RspModel<List<GroupCard>>> response) {
+                RspModel<List<GroupCard>> rspModel = response.body();
+                if (rspModel.success()) {
+                    // 返回数据
+                    callback.onDataLoaded(rspModel.getResult());
+                } else {
+                    Factory.decodeRspCode(rspModel, callback);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RspModel<List<GroupCard>>> call, Throwable t) {
+                callback.onDataNotAvailable(R.string.data_network_error);
+            }
+        });
+
+        // 把当前的调度者返回
+        return call;
     }
 }
