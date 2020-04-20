@@ -3,7 +3,10 @@ package net.lcadsl.qintalker.factory.presenter.message;
 import net.lcadsl.qintalker.factory.model.db.Group;
 import net.lcadsl.qintalker.factory.model.db.Message;
 import net.lcadsl.qintalker.factory.model.db.User;
+import net.lcadsl.qintalker.factory.model.db.view.MemberUserModel;
 import net.lcadsl.qintalker.factory.presenter.BaseContract;
+
+import java.util.List;
 
 /**
  * 聊天契约
@@ -34,6 +37,9 @@ public interface ChatContract {
 
     //群聊天的界面
     interface GroupView extends View<Group>{
-
+        //显示管理员菜单
+        void showAdminOption(boolean isAdmin);
+        //初始化成员
+        void onInitGroupMembers(List<MemberUserModel> members,int moreCount);
     }
 }

@@ -12,6 +12,10 @@ public class Common {
 
 
         //基础的网络请求地址
-        String API_URL="http://172.17.103.186:8888/api/";
+        String API_URL="http://192.168.1.105:8888/api/";
+
+
+        //云服务器网络请求地址
+        //String API_URL="http://114.55.99.31:8888/api/";
     }
 }

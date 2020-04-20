@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<net.lcadsl.qintalker.common.widget.MessageLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context=".frags.message.ChatUserFragment">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/trans">
+
+            <!--顶部布局的占位            -->
+            <ViewStub
+                android:id="@+id/view_stub_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/len_8"
+            android:paddingBottom="@dimen/len_8"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </android.support.design.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_alpha_224"
+        android:elevation="2dp"
+        android:orientation="horizontal"
+        android:outlineProvider="bounds"
+        tools:targetApi="lollipop">
+
+        <ImageView
+            android:id="@+id/btn_face"
+            android:layout_width="@dimen/len_44"
+            android:layout_height="@dimen/len_44"
+            android:padding="@dimen/len_8"
+            android:src="@drawable/ic_emoji"
+            android:tint="@color/textPrimary"
+            android:foreground="@drawable/ic_touch_fg"
+            android:contentDescription="@string/app_name"
+            android:saveEnabled="true" />
+
+        <ImageView
+            android:id="@+id/btn_record"
+            android:layout_width="@dimen/len_44"
+            android:layout_height="@dimen/len_44"
+            android:padding="@dimen/len_8"
+            android:src="@drawable/ic_record"
+            android:tint="@color/textPrimary"
+            android:foreground="@drawable/ic_touch_fg"
+            android:contentDescription="@string/app_name"
+            android:saveEnabled="true" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:id="@+id/edit_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:padding="@dimen/len_4"
+            android:maxHeight="@dimen/len_68"
+            android:minHeight="@dimen/len_44"
+            android:hint="@string/label_chat_edit_hint"
+            android:textColorHint="@color/textSecond"
+            android:textCursorDrawable="@drawable/ic_cursor"
+            android:lineSpacingExtra="0dp"
+            android:lineSpacingMultiplier="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/textPrimary"/>
+
+        <ImageView
+            android:id="@+id/btn_submit"
+            android:layout_width="@dimen/len_44"
+            android:layout_height="@dimen/len_44"
+            android:padding="@dimen/len_8"
+            android:src="@drawable/ic_submit"
+            android:tint="@color/textPrimary"
+            android:foreground="@drawable/ic_touch_fg"
+            android:contentDescription="@string/app_name"
+            android:saveEnabled="true" />
+
+
+    </LinearLayout>
+
+</net.lcadsl.qintalker.common.widget.MessageLayout>

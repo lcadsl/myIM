@@ -1,6 +1,7 @@
 package net.lcadsl.qintalker.push.frags.message;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -11,6 +12,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -68,7 +70,23 @@ public abstract class ChatFragment<InitModel>
     }
 
     @Override
+    protected final int getContentLayoutId() {
+        return R.layout.fragment_chat_common;
+    }
+
+    //得到顶部布局资源id
+    @LayoutRes
+    protected abstract  int getHeaderLayoutId();
+
+    @Override
     protected void initWidget(View root) {
+        //拿到占位布局
+        //替换顶部布局
+        ViewStub stub = root.findViewById(R.id.view_stub_header);
+        stub.setLayoutResource(getHeaderLayoutId());
+        stub.inflate();
+
+
         super.initWidget(root);
 
         initToolBar();
@@ -140,7 +158,7 @@ public abstract class ChatFragment<InitModel>
     void onSubmitClick() {
         if (mSubmit.isActivated()) {
             //发送
-            String content=mContent.getText().toString();
+            String content = mContent.getText().toString();
             mContent.setText("");
 
             mPresenter.pushText(content);
@@ -272,7 +290,7 @@ public abstract class ChatFragment<InitModel>
         @OnClick(R.id.im_portrait)
         void onRePushClick() {
             //发送失败后点击头像重新发送
-            if (mLoading != null&&mPresenter.rePush(mData)) {
+            if (mLoading != null && mPresenter.rePush(mData)) {
                 //状态改变
                 updateData(mData);
             }
