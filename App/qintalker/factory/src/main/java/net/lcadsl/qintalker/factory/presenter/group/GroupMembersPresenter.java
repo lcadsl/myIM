@@ -31,7 +31,7 @@ public class GroupMembersPresenter extends BaseRecyclerPresenter<MemberUserModel
             if (view == null)
                 return;
 
-            String groupId = view.getmGroupId();
+            String groupId = view.getGroupId();
 
             List<MemberUserModel> models = GroupHelper.getMemberUsers(groupId, -1);
 

@@ -16,6 +16,6 @@ public interface GroupMembersContract {
 
     //界面
     interface View extends BaseContract.RecyclerView<Presenter, MemberUserModel>{
-        String getmGroupId();
+        String getGroupId();
     }
 }

@@ -110,7 +110,7 @@ public class GroupMemberActivity extends PresenterToolbarActivity<GroupMembersCo
     }
 
     @Override
-    public String getmGroupId() {
+    public String getGroupId() {
         return mGroupId;
     }
 
