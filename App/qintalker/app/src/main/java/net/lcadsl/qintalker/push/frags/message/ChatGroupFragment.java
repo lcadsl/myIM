@@ -24,6 +24,7 @@ import net.lcadsl.qintalker.factory.model.db.view.MemberUserModel;
 import net.lcadsl.qintalker.factory.presenter.message.ChatContract;
 import net.lcadsl.qintalker.factory.presenter.message.ChatGroupPresenter;
 import net.lcadsl.qintalker.push.R;
+import net.lcadsl.qintalker.push.activities.GroupMemberActivity;
 import net.lcadsl.qintalker.push.activities.PersonalActivity;
 
 import java.util.List;
@@ -113,7 +114,7 @@ public class ChatGroupFragment extends ChatFragment<Group>
                 view.setScaleX(progress);
                 view.setScaleY(progress);
                 view.setAlpha(progress);
-                
+
             }
         }
     }
@@ -162,7 +163,8 @@ public class ChatGroupFragment extends ChatFragment<Group>
             mMemberMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO 显示成员列表
+                    //mReceiverId就是群的id
+                    GroupMemberActivity.show(getContext(),mReceiverId);
                 }
             });
         } else {
@@ -179,7 +181,8 @@ public class ChatGroupFragment extends ChatFragment<Group>
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     if (item.getItemId() == R.id.action_add) {
-                        //TODO 群成员添加
+                        //mReceiverId就是群的id
+                        GroupMemberActivity.showAdmin(getContext(),mReceiverId);
                         return true;
                     }
                     return false;
