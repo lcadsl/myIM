@@ -40,6 +40,6 @@ public interface ChatContract {
         //显示管理员菜单
         void showAdminOption(boolean isAdmin);
         //初始化成员
-        void onInitGroupMembers(List<MemberUserModel> members,int moreCount);
+        void onInitGroupMembers(List<MemberUserModel> members,long moreCount);
     }
 }
