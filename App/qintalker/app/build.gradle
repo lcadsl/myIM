@@ -51,6 +51,7 @@ dependencies {
 
     api "net.qiujuer.genius:ui:$rootProject.ext.geniusVersion"
     api "net.qiujuer.genius:res:$rootProject.ext.geniusVersion"
+    api "net.qiujuer.widget:airpanel:$rootProject.ext.airpanelVersion"
 
     api "de.hdodenhof:circleimageview:$rootProject.ext.circleimageviewVersion"
     api "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"

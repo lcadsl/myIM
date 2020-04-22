@@ -76,7 +76,8 @@
             android:name=".activities.MessageActivity"
             android:label="@string/title_activity_message"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Message" />
+            android:theme="@style/AppTheme.Message"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.PersonalActivity"
             android:label="@string/title_activity_personal"
@@ -90,7 +91,15 @@
             android:name=".activities.GroupMemberActivity"
             android:label="@string/title_member_list"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.TransStatusBar"/><!-- Android7 FileProvider 适配 -->
+            android:theme="@style/AppTheme.TransStatusBar" />
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="3" />
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" />
+        <!-- Android7 FileProvider 适配 -->
         <provider
             android:name=".AppFileProvider"
             android:authorities="${applicationId}.provider"

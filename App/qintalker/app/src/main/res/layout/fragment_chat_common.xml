@@ -2,10 +2,11 @@
 <net.lcadsl.qintalker.common.widget.MessageLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lay_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".frags.message.ChatUserFragment">
 
     <android.support.design.widget.CoordinatorLayout
@@ -21,10 +22,10 @@
 
             <!--顶部布局的占位            -->
             <ViewStub
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
                 android:id="@+id/view_stub_header"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap" />
         </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
@@ -50,53 +51,68 @@
             android:id="@+id/btn_face"
             android:layout_width="@dimen/len_44"
             android:layout_height="@dimen/len_44"
-            android:padding="@dimen/len_8"
-            android:src="@drawable/ic_emoji"
-            android:tint="@color/textPrimary"
-            android:foreground="@drawable/ic_touch_fg"
             android:contentDescription="@string/app_name"
-            android:saveEnabled="true" />
+            android:foreground="@drawable/ic_touch_fg"
+            android:padding="@dimen/len_8"
+            android:saveEnabled="true"
+            android:src="@drawable/ic_emoji"
+            android:tint="@color/textPrimary" />
 
         <ImageView
             android:id="@+id/btn_record"
             android:layout_width="@dimen/len_44"
             android:layout_height="@dimen/len_44"
-            android:padding="@dimen/len_8"
-            android:src="@drawable/ic_record"
-            android:tint="@color/textPrimary"
-            android:foreground="@drawable/ic_touch_fg"
             android:contentDescription="@string/app_name"
-            android:saveEnabled="true" />
+            android:foreground="@drawable/ic_touch_fg"
+            android:padding="@dimen/len_8"
+            android:saveEnabled="true"
+            android:src="@drawable/ic_record"
+            android:tint="@color/textPrimary" />
 
         <EditText
-            android:layout_width="0dp"
             android:id="@+id/edit_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@null"
-            android:padding="@dimen/len_4"
-            android:maxHeight="@dimen/len_68"
-            android:minHeight="@dimen/len_44"
             android:hint="@string/label_chat_edit_hint"
-            android:textColorHint="@color/textSecond"
-            android:textCursorDrawable="@drawable/ic_cursor"
             android:lineSpacingExtra="0dp"
             android:lineSpacingMultiplier="1"
+            android:maxHeight="@dimen/len_68"
+            android:minHeight="@dimen/len_44"
+            android:padding="@dimen/len_4"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/textPrimary"/>
+            android:textColor="@color/textPrimary"
+            android:textColorHint="@color/textSecond"
+            android:textCursorDrawable="@drawable/ic_cursor" />
 
         <ImageView
             android:id="@+id/btn_submit"
             android:layout_width="@dimen/len_44"
             android:layout_height="@dimen/len_44"
-            android:padding="@dimen/len_8"
-            android:src="@drawable/ic_submit"
-            android:tint="@color/textPrimary"
-            android:foreground="@drawable/ic_touch_fg"
             android:contentDescription="@string/app_name"
-            android:saveEnabled="true" />
+            android:foreground="@drawable/ic_touch_fg"
+            android:padding="@dimen/len_8"
+            android:saveEnabled="true"
+            android:src="@drawable/ic_submit"
+            android:tint="@color/textPrimary" />
 
 
     </LinearLayout>
+
+    <!--空气面板id必须是固定的-->
+    <net.qiujuer.widget.airpanel.AirPanelFrameLayout
+        android:id="@+id/airPanelSubLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_300"
+        android:visibility="gone">
+
+        <fragment
+            class="net.lcadsl.qintalker.push.frags.panel.PanelFragment"
+            android:id="@+id/frag_panel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </net.qiujuer.widget.airpanel.AirPanelFrameLayout>
 
 </net.lcadsl.qintalker.common.widget.MessageLayout>

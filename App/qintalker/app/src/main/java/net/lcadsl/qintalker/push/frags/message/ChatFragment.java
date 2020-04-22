@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -29,8 +30,11 @@ import net.lcadsl.qintalker.factory.persistence.Account;
 import net.lcadsl.qintalker.factory.presenter.message.ChatContract;
 import net.lcadsl.qintalker.push.R;
 import net.lcadsl.qintalker.push.activities.MessageActivity;
+import net.lcadsl.qintalker.push.frags.panel.PanelFragment;
 import net.qiujuer.genius.ui.compat.UiCompat;
 import net.qiujuer.genius.ui.widget.Loading;
+import net.qiujuer.widget.airpanel.AirPanel;
+import net.qiujuer.widget.airpanel.Util;
 
 import java.util.Objects;
 
@@ -63,6 +67,9 @@ public abstract class ChatFragment<InitModel>
     View mSubmit;
 
 
+    private AirPanel.Boss mPanelBoss;
+    private PanelFragment mPanelFragment;
+
     @Override
     protected void initArgs(Bundle bundle) {
         super.initArgs(bundle);
@@ -76,7 +83,7 @@ public abstract class ChatFragment<InitModel>
 
     //得到顶部布局资源id
     @LayoutRes
-    protected abstract  int getHeaderLayoutId();
+    protected abstract int getHeaderLayoutId();
 
     @Override
     protected void initWidget(View root) {
@@ -88,6 +95,17 @@ public abstract class ChatFragment<InitModel>
 
 
         super.initWidget(root);
+
+        //初始化面板操作
+        mPanelBoss = root.findViewById(R.id.lay_content);
+        mPanelBoss.setup(new AirPanel.PanelListener() {
+            @Override
+            public void requestHideSoftKeyboard() {
+                //请求隐藏软键盘
+                Util.hideKeyboard(mContent);
+            }
+        });
+        mPanelFragment= (PanelFragment) getChildFragmentManager().findFragmentById(R.id.frag_panel);
 
         initToolBar();
         initAppbar();
@@ -146,12 +164,16 @@ public abstract class ChatFragment<InitModel>
 
     @OnClick(R.id.btn_face)
     void onFaceClick() {
-        //TODO
+        mPanelBoss.openPanel();
+        mPanelFragment.showFace();
+
     }
 
     @OnClick(R.id.btn_record)
     void onRecordClick() {
-        //TODO
+        mPanelBoss.openPanel();
+        mPanelFragment.showRecord();
+        
     }
 
     @OnClick(R.id.btn_submit)
@@ -170,7 +192,9 @@ public abstract class ChatFragment<InitModel>
 
 
     private void onMoreClick() {
-        //TODO
+
+        mPanelBoss.openPanel();
+        mPanelFragment.showGallery();
     }
 
 
