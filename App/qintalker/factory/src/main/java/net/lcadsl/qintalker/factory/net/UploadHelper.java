@@ -25,7 +25,7 @@ import java.util.Date;
 public class UploadHelper {
     private static final String TAG = UploadHelper.class.getSimpleName();
 
-    private static final String ENDPOINT = "oss-cn-beijing.aliyuncs.com";
+    public static final String ENDPOINT = "oss-cn-beijing.aliyuncs.com";
     //OSS存储库名字
     private static final String BUCKET_NAME = "qintalker";
 

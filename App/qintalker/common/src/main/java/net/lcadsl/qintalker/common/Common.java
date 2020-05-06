@@ -17,5 +17,8 @@ public class Common {
 
         //云服务器网络请求地址
         String API_URL="http://114.55.99.31:8888/api/";
+
+        // 最大的上传图片大小860kb
+        long MAX_UPLOAD_IMAGE_LENGTH = 860 * 1024;
     }
 }

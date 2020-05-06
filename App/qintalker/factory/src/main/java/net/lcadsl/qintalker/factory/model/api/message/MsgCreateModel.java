@@ -92,6 +92,9 @@ public class MsgCreateModel {
     }
 
 
+    
+
+
     /**
      * 建造者模式，快速的建立一个发送Model
      */
