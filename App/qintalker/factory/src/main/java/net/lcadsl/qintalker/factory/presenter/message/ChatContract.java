@@ -16,7 +16,7 @@ public interface ChatContract {
         //发送文字
         void pushText(String content);
         //发送语音
-        void pushAudio(String path);
+        void pushAudio(String path,long time);
         //发送图片，一次可发送多张，是数组
         void pushImage(String[] paths);
         //重新发送一个消息，返回是否调度成功

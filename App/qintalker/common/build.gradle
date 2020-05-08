@@ -53,4 +53,5 @@ dependencies {
     api project(path: ':lang')
     api project(path: ':face-res')
     api "net.qiujuer.genius:kit-handler:$rootProject.ext.geniusVersion"
+    api "net.qiujuer.lame:lame:$rootProject.ext.lameVersion"
 }

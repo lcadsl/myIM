@@ -20,6 +20,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import net.lcadsl.qintalker.common.app.Application;
+import net.lcadsl.qintalker.common.tools.AudioPlayHelper;
+import net.lcadsl.qintalker.factory.utils.FileCache;
+import net.qiujuer.genius.kit.handler.Run;
+import net.qiujuer.genius.kit.handler.runable.Action;
 import net.qiujuer.genius.ui.Ui;
 import net.qiujuer.genius.ui.compat.UiCompat;
 import net.qiujuer.genius.ui.widget.Loading;
@@ -77,6 +82,10 @@ public abstract class ChatFragment<InitModel>
     private AirPanel.Boss mPanelBoss;
     private PanelFragment mPanelFragment;
 
+    // 语音的基础
+    private FileCache<AudioHolder> mAudioFileCache;
+    private AudioPlayHelper<AudioHolder> mAudioPlayer;
+
     @Override
     protected void initArgs(Bundle bundle) {
         super.initArgs(bundle);
@@ -120,11 +129,76 @@ public abstract class ChatFragment<InitModel>
         initAppbar();
         initEditContent();
 
+
+
         // RecyclerView基本设置
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new Adapter();
         mRecyclerView.setAdapter(mAdapter);
+        // 添加适配器监听器，进行点击的实现
+        mAdapter.setListener(new RecyclerAdapter.AdapterListenerImpl<Message>() {
+            @Override
+            public void onItemClick(RecyclerAdapter.ViewHolder holder, Message message) {
+                if (message.getType() == Message.TYPE_AUDIO && holder instanceof ChatFragment.AudioHolder) {
+                    // 权限的判断，当然权限已经全局申请了
+                    mAudioFileCache.download((ChatFragment.AudioHolder) holder, message.getContent());
+                }
+            }
+        });
+
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // 进入界面的时候就进行初始化
+        mAudioPlayer = new AudioPlayHelper<>(new AudioPlayHelper.RecordPlayListener<AudioHolder>() {
+            @Override
+            public void onPlayStart(AudioHolder audioHolder) {
+                // 范型作用就在于此
+                audioHolder.onPlayStart();
+            }
+
+            @Override
+            public void onPlayStop(AudioHolder audioHolder) {
+                // 直接停止
+                audioHolder.onPlayStop();
+            }
+
+            @Override
+            public void onPlayError(AudioHolder audioHolder) {
+                // 提示失败
+                Application.showToast(R.string.toast_audio_play_error);
+            }
+        });
+
+        // 下载工具类
+        mAudioFileCache = new FileCache<>("audio/cache", "mp3", new FileCache.CacheListener<AudioHolder>() {
+            @Override
+            public void onDownloadSucceed(final AudioHolder holder, final File file) {
+                Run.onUiAsync(new Action() {
+                    @Override
+                    public void call() {
+                        // 主线程播放
+                        mAudioPlayer.trigger(holder, file.getAbsolutePath());
+                    }
+                });
+            }
+
+            @Override
+            public void onDownloadFailed(AudioHolder holder) {
+                Application.showToast(R.string.toast_download_error);
+            }
+        });
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mAudioPlayer.destroy();
+    }
+
 
     @Override
     protected void initData() {
@@ -220,7 +294,8 @@ public abstract class ChatFragment<InitModel>
 
     @Override
     public void onRecordDone(File file, long time) {
-        //todo
+        // 语音回调回来
+        mPresenter.pushAudio(file.getAbsolutePath(),time);
     }
 
 
@@ -363,6 +438,10 @@ public abstract class ChatFragment<InitModel>
 
     // 语音的Holder
     class AudioHolder extends BaseHolder {
+        @BindView(R.id.txt_content)
+        TextView mContent;
+        @BindView(R.id.im_audio_track)
+        ImageView mAudioTrack;
 
         public AudioHolder(View itemView) {
             super(itemView);
@@ -371,7 +450,38 @@ public abstract class ChatFragment<InitModel>
         @Override
         protected void onBind(Message message) {
             super.onBind(message);
-            // TODO
+            // long 30000
+            String attach = TextUtils.isEmpty(message.getAttach()) ? "0" :
+                    message.getAttach();
+            mContent.setText(formatTime(attach));
+        }
+
+        // 当播放开始
+        void onPlayStart() {
+            // 显示
+            mAudioTrack.setVisibility(View.VISIBLE);
+        }
+
+        // 当播放停止
+        void onPlayStop() {
+            // 占位并隐藏
+            mAudioTrack.setVisibility(View.INVISIBLE);
+        }
+
+        private String formatTime(String attach) {
+            float time;
+            try {
+                // 毫秒转换为秒
+                time = Float.parseFloat(attach) / 1000f;
+            } catch (Exception e) {
+                time = 0;
+            }
+            // 12000/1000f = 12.0000000
+            // 取整一位小数点 1.234 -> 1.2 1.02 -> 1.0
+            String shortTime = String.valueOf(Math.round(time * 10f) / 10f);
+            // 1.0 -> 1     1.2000 -> 1.2
+            shortTime = shortTime.replaceAll("[.]0+?$|0+?$", "");
+            return String.format("%s″", shortTime);
         }
     }
 
