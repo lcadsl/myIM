@@ -137,13 +137,11 @@ public abstract class RecyclerAdapter<Data>
         notifyDataSetChanged();
     }
 
-    //替换为一个新的集合，其中包括清空
     public void replace(Collection<Data> dataList) {
         mDataList.clear();
-        if (dataList == null || dataList.size() == 0)
-            return;
-
-        mDataList.addAll(dataList);
+        if (dataList != null && dataList.size() > 0) {
+            mDataList.addAll(dataList);
+        }
         notifyDataSetChanged();
     }
 

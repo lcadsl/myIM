@@ -122,6 +122,21 @@ public abstract class ChatFragment<InitModel>
                 Util.hideKeyboard(mContent);
             }
         });
+        mPanelBoss.setOnStateChangedListener(new AirPanel.OnStateChangedListener() {
+            @Override
+            public void onPanelStateChanged(boolean isOpen) {
+                // 面板改变
+                if (isOpen)
+                    onBottomPanelOpened();
+            }
+
+            @Override
+            public void onSoftKeyboardStateChanged(boolean isOpen) {
+                // 软键盘改变
+                if (isOpen)
+                    onBottomPanelOpened();
+            }
+        });
         mPanelFragment = (PanelFragment) getChildFragmentManager().findFragmentById(R.id.frag_panel);
         mPanelFragment.setup(this);
 
@@ -198,6 +213,23 @@ public abstract class ChatFragment<InitModel>
         super.onDestroy();
         mAudioPlayer.destroy();
     }
+
+    private void onBottomPanelOpened() {
+        // 当底部面板或者软键盘打开时触发
+        if (mAppBarLayout != null)
+            mAppBarLayout.setExpanded(false, true);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (mPanelBoss.isOpen()) {
+            // 关闭面板并且返回true代表自己已经处理了消费了返回
+            mPanelBoss.closePanel();
+            return true;
+        }
+        return super.onBackPressed();
+    }
+
 
 
     @Override

@@ -143,6 +143,8 @@ public class GalleryView extends RecyclerView {
         mSelectedImages.clear();
 //        通知更新
         mAdapter.notifyDataSetChanged();
+
+        notifySelectChanged();
     }
 
     /**

@@ -26,6 +26,14 @@ public class App extends Application {
     }
 
 
+    @Override
+    protected void showAccountView(Context context) {
+
+        // 登录界面的显示
+
+
+    }
+
 
     /**
      * 个推服务在部分手机上极易容易回收，可放Resumed中唤起

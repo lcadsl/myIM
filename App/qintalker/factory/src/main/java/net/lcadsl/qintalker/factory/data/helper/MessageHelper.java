@@ -83,6 +83,7 @@ public class MessageHelper {
                             // 失败
                             card.setStatus(Message.STATUS_FAILED);
                             Factory.getMessageCenter().dispatch(card);
+                            return;
                         }
 
 

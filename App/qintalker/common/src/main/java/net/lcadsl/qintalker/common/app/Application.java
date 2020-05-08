@@ -1,5 +1,10 @@
 package net.lcadsl.qintalker.common.app;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.content.Context;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.StringRes;
 import android.widget.Toast;
@@ -8,16 +13,71 @@ import net.qiujuer.genius.kit.handler.Run;
 import net.qiujuer.genius.kit.handler.runable.Action;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Application extends android.app.Application {
 
     private static Application instance;
-
+    private List<Activity> activities = new ArrayList<>();
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(android.app.Activity activity, Bundle savedInstanceState) {
+                activities.add(activity);
+            }
+
+            @Override
+            public void onActivityStarted(android.app.Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(android.app.Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(android.app.Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(android.app.Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(android.app.Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(android.app.Activity activity) {
+                activities.remove(activity);
+            }
+
+
+
+        });
+    }
+
+    // 退出所有
+    public void finishAll(){
+        for (Activity activity : activities) {
+            activity.finish();
+        }
+
+        showAccountView(this);
+    }
+
+    protected void showAccountView(Context context){
     }
 
     public static Application getInstance() {
